@@ -73,7 +73,35 @@
 		<?php
 		playlist::topCinco();
 		?>
-		
+		<html>
+    <head>
+        <title>Ejemplon</title>
+        <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>
+    </head>
+        <script type="text/javascript">
+            $( function (){
+ 
+                $("#enviar").click( function (){
+                    $('#datos option:selected').appendTo("#recibe");
+                });
+                
+            });
+        </script>
+    <body>
+        <select id="datos">
+            <option>Uno</option>
+            <option>Dos</option>
+            <option>Tres</option>
+            <option>Cuatro</option>
+            <option>Cinco</option>
+            <option>Seis</option>
+        </select>
+        <button id="enviar">Enviar</button>
+        <select id="recibe"></select>
+ 
+    </body>
+</html>
+ 
 		
 	</body>
 </html>
