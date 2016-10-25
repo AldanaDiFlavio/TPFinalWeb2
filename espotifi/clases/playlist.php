@@ -1,5 +1,5 @@
 <?php
-include('db.php');
+include('../clases/db.php');
 
 class playlist {
 			

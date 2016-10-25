@@ -1,5 +1,5 @@
 <?php
-	include('playlist.php');
+	include('../clases/playlist.php');
 ?>
 
 
