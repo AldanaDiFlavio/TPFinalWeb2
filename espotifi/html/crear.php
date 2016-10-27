@@ -1,4 +1,8 @@
 <?php
+	session_start();
+	
+?>
+<?php
 	include('../clases/playlist.php');
 ?>
 
@@ -6,9 +10,11 @@
 
 <html>
 	<head>	
+	
+
 	</head>
 	<body>
-		<form method = "POST" action = "crearPlaylist.php">	
+		<form method = "POST" action = "../php/crearPlaylist.php">	
 			Crear playlist Nueva							
 			<p> Nombre </p>
 			<input type = "text" name = "nombre" /> 
@@ -16,13 +22,13 @@
 			<input type = "submit" name="accion" value = "crear" />		
 		</form>	
 		
-		<form method = "POST" action = "crearPlaylist.php">	
+		<form method = "POST" action = "../php/crearPlaylist.php">	
 			Agregar canciones a la playlist: 
 			<?php
 				
 				playlist::buscarPlaylist();  
 				echo "<br>";
-				playlist::buscarCanciones();  
+				 playlist::buscarCanciones();  
 						
 						
 				
@@ -31,7 +37,7 @@
 		</form>	
 		
 		
-		<form method = "POST" action = "crearPlaylist.php">	
+		<form method = "POST" action = "../php/crearPlaylist.php">	
 			cambiar estado a la playlist: 
 			<?php
 				playlist::buscarPlaylist();  
@@ -45,7 +51,7 @@
 			<input type = "submit" name="accion" value = "cambiar estado" />		
 		</form>	
 		
-		<form method = "POST" action = "crearPlaylist.php">	
+		<form method = "POST" action = "../php/crearPlaylist.php">	
 			cambiar esquema de colores a la playlist: 
 			<?php
 				playlist::buscarPlaylist();  
@@ -59,7 +65,7 @@
 			<input type = "submit" name="accion" value = "cambiar esquema" />		
 		</form>	
 		
-		<form method = "POST" action = "crearPlaylist.php">	
+		<form method = "POST" action = "../php/crearPlaylist.php">	
 			cambiar genero a la playlist: 
 			<?php
 				playlist::buscarPlaylist();  
@@ -73,34 +79,26 @@
 		<?php
 		playlist::topCinco();
 		?>
-		<html>
-    <head>
-        <title>Ejemplon</title>
-        <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>
-    </head>
-        <script type="text/javascript">
-            $( function (){
+		
+		
+		<form method = "POST" action = "editarPlaylist.php">	
+			Editar playlist [Nuevo]: 
+			<?php
+				
+				playlist::buscarPlaylist();  
+
+			?>
+			<input type = "submit" name="accion" value = "editar [Nuevo]" />		
+		</form>	
+		
+		
+		
+		
+
+        
  
-                $("#enviar").click( function (){
-                    $('#datos option:selected').appendTo("#recibe");
-                });
-                
-            });
-        </script>
-    <body>
-        <select id="datos">
-            <option>Uno</option>
-            <option>Dos</option>
-            <option>Tres</option>
-            <option>Cuatro</option>
-            <option>Cinco</option>
-            <option>Seis</option>
-        </select>
-        <button id="enviar">Enviar</button>
-        <select id="recibe"></select>
- 
-    </body>
-</html>
+    
+
  
 		
 	</body>

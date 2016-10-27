@@ -1,5 +1,5 @@
 <?php
-	include('db.php');
+	include_once('db.php');
 
 	class Cancion{
 		public $idCancion;
@@ -38,5 +38,22 @@
 			$db->desconectar();
 
 		}
+		
+		public static function buscarCanciones($filtroContenido, $filtroTipo){ //Busca canciones a partir de un filtro
+				$db = new BaseDatos();			
+				if($db->conectar()){
+							$buscaCanciones = "SELECT idCancion id, titulo, album, artista FROM cancion WHERE baneo = 0 AND $filtroTipo = '$filtroContenido';";
+							$resultado = mysqli_query( $db->conexion, $buscaCanciones) or die("No se pudo conectar.");
+							echo "<select id='todasCanciones' name='todasCanciones[]' size='10' multiple>";
+							while ($row = mysqli_fetch_assoc($resultado)){    
+								echo "<option value='$row[id]'>$row[titulo] | $row[album] | $row[artista]</option>";
+							}  
+							echo "</select>";
+						
+				}
+				$db->desconectar();
+			}
+		
+		
 	}
 ?>

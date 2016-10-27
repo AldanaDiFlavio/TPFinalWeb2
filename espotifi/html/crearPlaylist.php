@@ -65,6 +65,7 @@ session_start();
 							}			  
 				}
 		$db->desconectar();
+		header('Location:editarPlaylist.php');
 		
 	}
 	
