@@ -1,3 +1,21 @@
+-- phpMyAdmin SQL Dump
+-- version 4.5.1
+-- http://www.phpmyadmin.net
+--
+-- Servidor: 127.0.0.1
+-- Tiempo de generación: 01-11-2016 a las 21:35:33
+-- Versión del servidor: 10.1.13-MariaDB
+-- Versión de PHP: 5.6.23
+
+SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
+SET time_zone = "+00:00";
+
+
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!40101 SET NAMES utf8mb4 */;
+
 --
 -- Base de datos: `web2`
 --
@@ -17,19 +35,20 @@ CREATE TABLE `cancion` (
   `iDdueño` int(11) NOT NULL,
   `fecha_creacion` date NOT NULL,
   `baneo` tinyint(1) NOT NULL,
-  `path` varchar(50) NOT NULL
+  `path` varchar(50) NOT NULL,
+  `codGenero` int(11) NOT NULL DEFAULT '1'
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
 -- Volcado de datos para la tabla `cancion`
 --
 
-INSERT INTO `cancion` (`idCancion`, `titulo`, `album`, `artista`, `duracion`, `iDdueño`, `fecha_creacion`, `baneo`, `path`) VALUES
-(1, 'mujer amante', 'magos, espadas y rosas', 'rata blanca', 4, 2, '2016-10-11', 0, 'canciones/mujer amante.mp3'),
-(2, 'aire', 'warcry', 'warcry', 5, 2, '2016-10-15', 0, 'canciones/aire.mp3'),
-(3, 'pura vida', 'carajo', 'carajo', 4, 1, '2016-10-11', 0, 'canciones/pura vida.mp3'),
-(4, 'dias duros', 'magos, espadas y rosas', 'rata blanca', 4, 2, '2016-10-05', 0, 'canciones/dias duros.mp3'),
-(5, 'opa', 'volve al ruido', 'lo cuco', 3, 0, '2016-10-11', 0, 'canciones/opa.mp3');
+INSERT INTO `cancion` (`idCancion`, `titulo`, `album`, `artista`, `duracion`, `iDdueño`, `fecha_creacion`, `baneo`, `path`, `codGenero`) VALUES
+(1, 'mujer amante', 'magos, espadas y rosas', 'rata blanca', 4, 2, '2016-10-11', 0, 'canciones/mujer amante.mp3', 1),
+(2, 'aire', 'warcry', 'warcry', 5, 2, '2016-10-15', 0, 'canciones/aire.mp3', 2),
+(3, 'pura vida', 'carajo', 'carajo', 4, 1, '2016-10-11', 0, 'canciones/pura vida.mp3', 3),
+(4, 'dias duros', 'magos, espadas y rosas', 'rata blanca', 4, 2, '2016-10-05', 0, 'canciones/dias duros.mp3', 3),
+(5, 'opa', 'volve al ruido', 'lo cuco', 3, 0, '2016-10-11', 0, 'canciones/opa.mp3', 5);
 
 -- --------------------------------------------------------
 
@@ -107,47 +126,46 @@ INSERT INTO `estado` (`idEstado`, `descripcion`) VALUES
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `genero`
+-- Estructura de tabla para la tabla `generocanciones`
 --
 
-CREATE TABLE `genero` (
+CREATE TABLE `generocanciones` (
   `idGenero` int(11) NOT NULL,
-  `descripcion` varchar(30) NOT NULL,
-  `tipo` int(11) NOT NULL
+  `descripcion` varchar(30) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Volcado de datos para la tabla `genero`
+-- Volcado de datos para la tabla `generocanciones`
 --
 
-INSERT INTO `genero` (`idGenero`, `descripcion`, `tipo`) VALUES
-(1, 'dias de lluvia', 0),
-(2, 'pop', 1),
-(3, 'rock', 1),
-(4, 'fiesta pop', 0),
-(5, 'metal', 1);
+INSERT INTO `generocanciones` (`idGenero`, `descripcion`) VALUES
+(1, 'ninguno'),
+(2, 'pop'),
+(3, 'rock'),
+(4, 'progresivo'),
+(5, 'metal');
 
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `pertenece`
+-- Estructura de tabla para la tabla `generoplaylist`
 --
 
-CREATE TABLE `pertenece` (
-  `codElemento` int(11) NOT NULL,
-  `codGenero` int(11) NOT NULL
+CREATE TABLE `generoplaylist` (
+  `idGenero` int(11) NOT NULL,
+  `descripcion` varchar(30) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Volcado de datos para la tabla `pertenece`
+-- Volcado de datos para la tabla `generoplaylist`
 --
 
-INSERT INTO `pertenece` (`codElemento`, `codGenero`) VALUES
-(3, 1),
-(6, 3),
-(6, 5),
-(9, 4),
-(10, 4);
+INSERT INTO `generoplaylist` (`idGenero`, `descripcion`) VALUES
+(1, 'ninguno'),
+(2, 'fiesta loca'),
+(3, 'fiesta pop'),
+(4, 'metal extremo'),
+(5, 'bizarro');
 
 -- --------------------------------------------------------
 
@@ -164,27 +182,28 @@ CREATE TABLE `playlist` (
   `baneo` tinyint(1) DEFAULT '0',
   `codEstado` int(11) NOT NULL DEFAULT '3',
   `codEsquema` int(11) NOT NULL,
-  `codDueno` int(11) NOT NULL
+  `codDueno` int(11) NOT NULL,
+  `codGenero` int(11) NOT NULL DEFAULT '1'
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
 -- Volcado de datos para la tabla `playlist`
 --
 
-INSERT INTO `playlist` (`idPlaylist`, `nombre`, `cantidad_reproducciones`, `cantidad_votos`, `fecha_creacion`, `baneo`, `codEstado`, `codEsquema`, `codDueno`) VALUES
-(1, 'nuevo', 0, 45, '2016-10-22', 0, 1, 0, 1),
-(2, 'rock', 0, 52, '2016-10-22', 0, 1, 1, 2),
-(3, 'pop', 0, 15, '2016-10-22', 0, 3, 1, 1),
-(4, 'asd', 0, 12, '2016-10-22', 0, 1, 3, 1),
-(5, 'electro', 0, 0, '2016-10-22', 0, 0, 0, 1),
-(6, 'heavy', 0, 34, '2016-10-22', 0, 1, 0, 1),
-(7, 'trash', 0, 1230, '2016-10-24', 0, 2, 0, 0),
-(8, 'power', 0, 66, '2016-10-24', 0, 1, 2, 0),
-(9, 'super playlist', 0, 1, '2016-10-24', 0, 2, 2, 0),
-(10, 'prueba', 0, 22, '2016-10-24', 0, 3, 3, 0),
-(11, 'mi playlist', 0, 0, '2016-10-25', 0, 3, 0, 0),
-(12, 'jorgito', 0, 0, '2016-10-25', 0, 1, 0, 0),
-(13, 'asdfasdfasdf', 0, 0, '2016-10-25', 0, 3, 0, 0);
+INSERT INTO `playlist` (`idPlaylist`, `nombre`, `cantidad_reproducciones`, `cantidad_votos`, `fecha_creacion`, `baneo`, `codEstado`, `codEsquema`, `codDueno`, `codGenero`) VALUES
+(1, 'nuevo', 0, 45, '2016-10-22', 0, 1, 0, 1, 1),
+(2, 'rock', 0, 52, '2016-10-22', 0, 1, 1, 2, 1),
+(3, 'pop', 0, 15, '2016-10-22', 0, 3, 1, 1, 1),
+(4, 'asd', 0, 12, '2016-10-22', 0, 1, 3, 1, 1),
+(5, 'electro', 0, 0, '2016-10-22', 0, 0, 0, 1, 1),
+(6, 'heavy', 0, 34, '2016-10-22', 0, 1, 0, 1, 1),
+(7, 'trash', 0, 1230, '2016-10-24', 0, 2, 0, 0, 1),
+(8, 'power', 0, 66, '2016-10-24', 0, 1, 2, 0, 1),
+(9, 'super playlist', 0, 1, '2016-10-24', 0, 2, 2, 0, 1),
+(10, 'prueba', 0, 22, '2016-10-24', 0, 3, 3, 0, 1),
+(11, 'mi playlist', 0, 0, '2016-10-25', 0, 3, 0, 0, 1),
+(12, 'jorgito', 0, 0, '2016-10-25', 0, 1, 0, 0, 1),
+(13, 'asdfasdfasdf', 0, 0, '2016-10-25', 0, 3, 0, 0, 1);
 
 -- --------------------------------------------------------
 
@@ -261,16 +280,16 @@ ALTER TABLE `estado`
   ADD PRIMARY KEY (`idEstado`);
 
 --
--- Indices de la tabla `genero`
+-- Indices de la tabla `generocanciones`
 --
-ALTER TABLE `genero`
+ALTER TABLE `generocanciones`
   ADD PRIMARY KEY (`idGenero`);
 
 --
--- Indices de la tabla `pertenece`
+-- Indices de la tabla `generoplaylist`
 --
-ALTER TABLE `pertenece`
-  ADD PRIMARY KEY (`codElemento`,`codGenero`);
+ALTER TABLE `generoplaylist`
+  ADD PRIMARY KEY (`idGenero`);
 
 --
 -- Indices de la tabla `playlist`
@@ -312,9 +331,14 @@ ALTER TABLE `vota`
 ALTER TABLE `cancion`
   MODIFY `idCancion` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 --
--- AUTO_INCREMENT de la tabla `genero`
+-- AUTO_INCREMENT de la tabla `generocanciones`
 --
-ALTER TABLE `genero`
+ALTER TABLE `generocanciones`
+  MODIFY `idGenero` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+--
+-- AUTO_INCREMENT de la tabla `generoplaylist`
+--
+ALTER TABLE `generoplaylist`
   MODIFY `idGenero` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 --
 -- AUTO_INCREMENT de la tabla `playlist`

@@ -92,7 +92,6 @@
 				<h1>Top 5 <span class="glyphicon glyphicon-heart-empty"></span></h1>
 				<div id="musicPlayer">
 					<div class="row">
-					
 						<div id="musicLists" class="col-md-10">
 							<div class="panel with-nav-tabs panel-default">
 								<div class="panel-heading">
@@ -101,7 +100,7 @@
 										include_once('/clases/db.php');
 										$db = new BaseDatos();
 											if($db->conectar()){
-												$buscarTop5 = "SELECT idPlaylist id, nombre, cantidad_votos FROM playlist ORDER BY cantidad_votos DESC LIMIT 0,5;";
+												$buscarTop5 = "SELECT idPlaylist id, nombre FROM playlist WHERE codEstado = 1 ORDER BY cantidad_votos DESC LIMIT 0,5;";
 												$top5 = mysqli_query( $db->conexion, $buscarTop5) or die("No se pudo conectar.");
 											}
 										$db->desconectar();
@@ -120,7 +119,7 @@
 										<?php	
 											$db2 = new BaseDatos();
 												if($db2->conectar()){
-													$buscarCincoMejores = "SELECT idPlaylist id FROM playlist ORDER BY cantidad_votos DESC LIMIT 0,5;";
+													$buscarCincoMejores = "SELECT idPlaylist id FROM playlist WHERE codEstado = 1 ORDER BY cantidad_votos DESC LIMIT 0,5;";
 													$resultado = mysqli_query( $db2->conexion, $buscarCincoMejores) or die("No se pudo conectar.");
 												}
 											$db2->desconectar();
@@ -136,12 +135,13 @@
 															<th>Titulo</th>
 															<th>Artista</th>
 															<th>Album</th>
+															<th>Genero</th>
 															<th></th>
 														</tr>
 													</thead>";
 												$db3 = new BaseDatos();
 												if($db3->conectar()){
-													$sql = "SELECT can.idCancion id, can.titulo, can.artista, can.album, can.path FROM cancion can JOIN contiene con ON can.idCancion = con.codCancion WHERE baneo = 0 AND con.codPlaylist =" . $fila['id'] ;
+													$sql = "SELECT can.idCancion id, can.titulo, can.artista, can.album, gen.descripcion des FROM cancion can JOIN contiene con ON can.idCancion = con.codCancion JOIN generoCanciones gen ON gen.idGenero = can.codGenero WHERE can.baneo = 0 AND con.codPlaylist =" . $fila['id'] ;
 													$resultado2 = mysqli_query($db3->conexion, $sql);
 												}
 												$db3->desconectar();													
@@ -150,11 +150,10 @@
 														<td>" . $row["titulo"] . "</td>
 														<td>" . $row["artista"] . "</td>
 														<td>" . $row["album"] . "</td>
+														<td>" . $row["des"] . "</td>
 														<td><a  onclick='reproduceCancion(" . $row["id"] . ")'><span class='glyphicon glyphicon-play-circle'></span></a></td>
 													</tr>";
 												}
-												
-												
 												echo "			</table>
 															</div>	
 														</div>
