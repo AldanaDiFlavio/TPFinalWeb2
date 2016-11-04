@@ -52,16 +52,17 @@
 	</script>
 	
 </head>
-<body>
-	<div class="encabezado">
+<body  onload="imageRandom()">
+	<div class="encabezado ">
 		<div class="container">
 		<div class="logo col-md-9">
-			<a href="index.php"><img src="imagenes/espotifi-logo.png" alt="Espotifí"></a>
+			<a href="index.php"><img src="imagenes/espotifi-logo.png" alt="Espotifí" title="Espotifí"></a>
 		</div>
 		<div class="registro col-md-3">
+			<div class="pull-right">
 			<a href="registro.php">Registrate</a>
 			<a href="#login" data-toggle="modal">Iniciá Sesión</a>
-			
+			</div>
 			<div class="modal fade" id="login">
 				<div class="modal-dialog">
 					<div class="modal-content">
@@ -77,7 +78,7 @@
 							</form>
 						</div>
 						<div class="modal-footer">
-							<button type="button" class="btn btn-success">Iniciá Sesión</button>
+							<a href="home.php"><button type="button" class="btn btn-success">Iniciá Sesión</button></a>
 						</div>
 					</div>
 				</div>
@@ -88,12 +89,12 @@
 	
 	<section>
 		<div class="container">
-			<div class="col-md-10">
-				<h1>Top 5 <span class="glyphicon glyphicon-heart-empty"></span></h1>
+			<div class="col-md-7">
+				<h1>Top 5 <span class="glyphicon glyphicon-heart"></span></h1>
 				<div id="musicPlayer">
 					<div class="row">
 					
-						<div id="musicLists" class="col-md-10">
+						<div id="musicLists" >
 							<div class="panel with-nav-tabs panel-default">
 								<div class="panel-heading">
 									<ul class="nav nav-tabs">
@@ -168,16 +169,32 @@
 					</div>
 				</div>	
 			</div>
-			<div class="col-md-2">
-				<h1>Registrate<br/>para<br/>más <a href="registro.html"><span class="glyphicon glyphicon-menu-right"></span></a></h1>
+			<div class="col-md-5">
+				<div class="pull-right">
+				<h1>Registrate<br/>para<br/>más <a href="registro.php"><span class="glyphicon glyphicon-menu-right"></span></a></h1>
+				</div>
 			</div>
 		</div>
 	</section>
-	
+	<div class="clearfix"></div>
 	<footer>
+		<div class="container">		
+			<img class="center-block" src="imagenes/espotifi-iso.png" alt="Espotifi" width="25px">
+			<div class="row">
+				<div class="col-md-4">
+					<p> </p>				
+				</div>
+				<div class="col-md-4 col-md-offset-1">
+					<p>Espotifi - Programación Web 2 </p>				
+				</div>
+				<div class="col-md-4">
+					<p> </p>				
+				</div>
+			</div>
 	</footer>
 	<!-- Latest compiled and minified JavaScript -->
 	<script src="http://code.jquery.com/jquery-latest.js"></script>
-	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>	
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+	<script src="js/imageRandom.js"></script>
 </body>
 </html>
