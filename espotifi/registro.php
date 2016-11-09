@@ -9,14 +9,14 @@
 	<link rel="shortcut icon" type="image/x-icon" href="Imagenes/espotifi.ico">
 	<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
 </head>
-<body>
+<body  onload="imageRandom()">
 <div class="encabezado">
 		<div class="container">
 		<div class="logo col-md-9">
-			<a href="index.html"><img src="imagenes/espotifi-logo.png" alt="Espotifí"></a>
+			<a href="index.php"><img src="imagenes/espotifi-logo.png" alt="Espotifí"></a>
 		</div>
 		<div class="registro col-md-3">
-			<a href="registro.html">Registrate</a>
+			<a href="registro.php">Registrate</a>
 			<a href="#login" data-toggle="modal">Iniciá Sesión</a>
 			
 			<div class="modal fade" id="login">
@@ -34,7 +34,7 @@
 							</form>
 						</div>
 						<div class="modal-footer">
-							<button type="button" class="btn btn-success">Iniciá Sesión</button>
+							<a href="home.php"><button type="button" class="btn btn-success">Iniciá Sesión</button></a>
 						</div>
 					</div>
 				</div>
@@ -52,14 +52,18 @@
 					<input class="form-control" type="email" name="email" placeholder="E-mail">						
 					<input class="form-control" type="password" name="contraseña" placeholder="Contraseña">	
 					<input class="form-control" type="password" name="verificarContraseña" placeholder="Repita su Contraseña">
-					<button type="button" class="btn btn-success">Registrate</button>
+					<a href="home.php"><button type="button" class="btn btn-success">Registrate</button></a>
 				</form>
 			</div>
 
 		</div>
 	</section>
+	<footer>
+	</footer>
 	<!-- Latest compiled and minified JavaScript -->
 	<script src="http://code.jquery.com/jquery-latest.js"></script>
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>	
+	<script src="js/imageRandom.js"></script>
+
 </body>
 </html>
