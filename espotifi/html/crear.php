@@ -1,14 +1,20 @@
 <?php
-	include('playlist.php');
+	session_start();
+	
+?>
+<?php
+	include('../clases/playlist.php');
 ?>
 
 
 
 <html>
 	<head>	
+	
+
 	</head>
 	<body>
-		<form method = "POST" action = "crearPlaylist.php">	
+		<form method = "POST" action = "../php/crearPlaylist.php">	
 			Crear playlist Nueva							
 			<p> Nombre </p>
 			<input type = "text" name = "nombre" /> 
@@ -16,13 +22,13 @@
 			<input type = "submit" name="accion" value = "crear" />		
 		</form>	
 		
-		<form method = "POST" action = "crearPlaylist.php">	
+		<form method = "POST" action = "../php/crearPlaylist.php">	
 			Agregar canciones a la playlist: 
 			<?php
 				
 				playlist::buscarPlaylist();  
 				echo "<br>";
-				playlist::buscarCanciones();  
+				 playlist::buscarCanciones();  
 						
 						
 				
@@ -31,7 +37,7 @@
 		</form>	
 		
 		
-		<form method = "POST" action = "crearPlaylist.php">	
+		<form method = "POST" action = "../php/crearPlaylist.php">	
 			cambiar estado a la playlist: 
 			<?php
 				playlist::buscarPlaylist();  
@@ -45,7 +51,7 @@
 			<input type = "submit" name="accion" value = "cambiar estado" />		
 		</form>	
 		
-		<form method = "POST" action = "crearPlaylist.php">	
+		<form method = "POST" action = "../php/crearPlaylist.php">	
 			cambiar esquema de colores a la playlist: 
 			<?php
 				playlist::buscarPlaylist();  
@@ -59,7 +65,7 @@
 			<input type = "submit" name="accion" value = "cambiar esquema" />		
 		</form>	
 		
-		<form method = "POST" action = "crearPlaylist.php">	
+		<form method = "POST" action = "../php/crearPlaylist.php">	
 			cambiar genero a la playlist: 
 			<?php
 				playlist::buscarPlaylist();  
@@ -74,6 +80,26 @@
 		playlist::topCinco();
 		?>
 		
+		
+		<form method = "POST" action = "editarPlaylist.php">	
+			Editar playlist [Nuevo]: 
+			<?php
+				
+				playlist::buscarPlaylist();  
+
+			?>
+			<input type = "submit" name="accion" value = "editar [Nuevo]" />		
+		</form>	
+		
+		
+		
+		
+
+        
+ 
+    
+
+ 
 		
 	</body>
 </html>

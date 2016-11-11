@@ -1,5 +1,8 @@
 <?php
-	include('playlist.php');
+session_start();
+	
+	
+	include('../clases/playlist.php');
 	
 	$accion = $_POST['accion'];
 	
@@ -9,19 +12,7 @@
 		playlist::crearPlaylist($nombre);  		
 	}	
 	
-	if ($accion == "agregar"){
-		$idPlaylist = $_POST['playlist'];
-		
-		$db = new BaseDatos();
-				if($db->conectar()){															
-							foreach($_POST['check_list'] as $check) {
-								$idCancion = "$check";								
-								$playlist = new playlist($idPlaylist);
-								$playlist->agregarCancion($idCancion);
-							}    			 
-				}
-				$db->desconectar();
-	}
+	
 	
 	if ($accion == "cambiar estado"){
 		$idPlaylist = $_POST['playlist'];
@@ -58,5 +49,24 @@
 				}
 				$db->desconectar();
 	}
+	
+	if ($accion == "remover"){
+		
+		
+		$db = new BaseDatos();
+				if($db->conectar()){							
+					if(!empty($_REQUEST['cancionesPlaylist'])){
+								
+								$cancionesSeleccionadas = $_REQUEST['cancionesPlaylist'];
+								foreach($cancionesSeleccionadas as $canciones) {
+									$playlist = new playlist($_SESSION['idPlaylistSesion']);
+									$playlist->eliminaCancion($canciones);
+								}
+							}			  
+				}
+		$db->desconectar();
+		
+	}
+	
 ?>
 
