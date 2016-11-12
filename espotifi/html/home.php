@@ -1,189 +1,162 @@
 <?php
-session_start();
+	session_start();
+	$_SESSION['idUsuario'] = 1;
+	include_once('../clases/db.php');
+	include_once('../clases/playlist.php');
+	playlist::purgaPlaylistVacias($_SESSION['idUsuario']);
 ?>
 
-<?php 
-	include '../clases/database.php';
-	
-	if ($_SESSION['login'] == "on")
-		{
-		
-		}else{
-			 header('location: ../index.php'); 
-			 }  
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Espotifí</title>
+	<!-- Latest compiled and minified CSS -->
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+	<link rel="stylesheet" type="text/css" href="css/estilos.css">
+	<link rel="shortcut icon" type="image/x-icon" href="../imagenes/espotifi.ico">
+	<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
 
-	
-	$db = new database();
-	$db->conectar();
-	//para ver/ocultar perfil, funciona como flag.
-	$_SESSION["perfil"] = "mostrar";								
-?>
-
-<html>
-
-	<head>
-				
-		<script>//se pueden poner los script en un archivo externo?
-			function verPerfil(){
-								
-								xhttp = new XMLHttpRequest();
-								xhttp.onreadystatechange = function()	
-										{
-										if (this.readyState == 4 && this.status == 200)
-												{
-												document.getElementById("perfil").innerHTML = this.responseText;
-												}
-										};
-								
-								//xhttp.open("GET", "../php/ver.php?nombre="(porque hay que usar un + para concatenar?)+nombre, "true");
-								xhttp.open("GET", "../php/verperfil.php", "true");
-								xhttp.send();
-								
-								xhttp = new XMLHttpRequest();
-								xhttp.onreadystatechange = function()	
-										{
-										if (this.readyState == 4 && this.status == 200)
-												{
-												document.getElementById("mostrar").innerHTML = this.responseText;	
-												}
-										};
-								xhttp.open("GET", "../php/botonVer.php" , "true");
-								xhttp.send();
-								}
-								
-			function seguir(siguiendo)	{
-								
-								//seguir a un usuario
-								xhttp = new XMLHttpRequest();
-								xhttp.onreadystatechange = function()	
-										{
-										if (this.readyState == 4 && this.status == 200)
-												{
-												document.getElementById("seguir").innerHTML = this.responseText;
-												}
-										};
-														
-								xhttp.open("GET", "../php/seguir.php?siguiendo="+siguiendo, "true");
-								xhttp.send();
-								
-								//a quien sigue								
-								xhttp = new XMLHttpRequest();
-								xhttp.onreadystatechange = function()	
-										{
-										if (this.readyState == 4 && this.status == 200)
-												{
-												document.getElementById("siguiendoA").innerHTML = this.responseText;	
-												}
-										};
-								xhttp.open("GET", "../php/siguiendoA.php" , "true");
-								xhttp.send();											
-								
-								}
-		function escribeMotivo(usuario_denunciado)
-						{
-						/*
-						var us = usuario_denunciado;
-						var mo = motivo_denuncia;
-						document.writeln(us,mo); 
-						*/
-						xhttp = new XMLHttpRequest();
-						xhttp.onreadystatechange = function()	
-								{
-								if (this.readyState == 4 && this.status == 200)
-										{
-										document.getElementById("denuncias").innerHTML = this.responseText;	
-										}
-								};
-						xhttp.open("GET", "../php/escribeMotivo.php?usuario_denunciado="+usuario_denunciado, "true");
-						xhttp.send();	
+	<script type="text/javascript">
+		function getXMLHTTP() {
+				var xmlhttp=false;
+				try{
+					xmlhttp=new XMLHttpRequest();
+				}
+				catch(e)	{
+					try{
+						xmlhttp= new ActiveXObject("Microsoft.XMLHTTP");
+					}
+					catch(e){	
+						try{
+							xmlhttp = new ActiveXObject("Msxml2.XMLHTTP");
 						}
-						
-		function denunciar(usuario_denunciado,motivo_denuncia)
-						{
-						
-						xhttp = new XMLHttpRequest();
-						xhttp.onreadystatechange = function()	
-								{
-								if (this.readyState == 4 && this.status == 200)
-										{
-										document.getElementById("denuncias").innerHTML = this.responseText;	
-										}
-								};
-						xhttp.open("GET", "../php/denunciar.php?usuario_denunciado="+usuario_denunciado+"&motivo_denuncia="+motivo_denuncia, "true");
-						xhttp.send();	
-						
-						}								
+						catch(e){
+							xmlhttp=false;
+						}
+					}
+				}
+				return xmlhttp;
+			}
 
-		</script>
+		function habilitaFiltros(){	
+			if (document.getElementById('filtrosPlaylist').style.display == 'none'){ 
+				document.getElementById('filtrosPlaylist').style.display = 'block' 
+			} else { document.getElementById('filtrosPlaylist').style.display = 'none' }
+			realizarBusqueda();
+		}
 		
-		
-	</head>
+		function realizarBusqueda(textoBuscado){
+			var filtroUsuario = document.getElementsByName('filtroPrimario')[0];
+			var filtroPlaylist = document.getElementsByName('filtroPrimario')[1];
+			var filtroSecundarioPlaylist = document.getElementById('filtrosPlaylist').value;
+			
+			if (filtroUsuario.checked == true) {
+				//document.getElementById('todasMisPlaylist').innerHTML = "usuario";
+				var strURL="realizarBusqueda.php?filtroPrimario="+filtroUsuario.value+"&filtroSecundario='nada'&textoBuscado="+textoBuscado;
+			}
+			if (filtroPlaylist.checked == true && filtroSecundarioPlaylist == 'nombre') {
+				//document.getElementById('todasMisPlaylist').innerHTML = "playlist - nombre";
+				var strURL="realizarBusqueda.php?filtroPrimario="+filtroPlaylist.value+"&filtroSecundario="+filtroSecundarioPlaylist+"&textoBuscado="+textoBuscado;
+			}
+			if (filtroPlaylist.checked == true && filtroSecundarioPlaylist == 'genero') {
+				//document.getElementById('todasMisPlaylist').innerHTML = "playlist - genero";
+				var strURL="realizarBusqueda.php?filtroPrimario="+filtroPlaylist.value+"&filtroSecundario="+filtroSecundarioPlaylist+"&textoBuscado="+textoBuscado;
+			}
+			var req = getXMLHTTP();
+			
+			if (req) {
+				req.onreadystatechange = function() {
+					if (req.readyState == 4) {
+						// only if "OK"
+						if (req.status == 200) {
+							document.getElementById('todasMisPlaylist').innerHTML = req.responseText ;
+						} else {
+							alert("There was a problem while using XMLHTTP:\n" + req.statusText);
+						}
+					}
+				}
+					req.open("GET", strURL, true);
+					req.send(null);
+			}
+			
+			
+		}
+	</script>
 	
-	<body>
+	
+	</head>
+<body>
+	
+	<div class="container">
+		<nav class="navbar navbar-default navbar-fixed-top navbar-inverse">
+			<div class="container-fluid">
+				<div class="navbar-header">
+					<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar"> 
+						<span class="icon-bar"></span>
+						<span class="icon-bar"></span>
+						<span class="icon-bar"></span>
+					</button>
+
+					<a href="home.php" class="navbar-brand"><img src="../imagenes/espotifi-logo2.png" alt="Espotifi" width="120px"></a>
+				</div>
+
+				<div class="collapse navbar-collapse" id="navbar">
+					<ul class="nav navbar-nav">
+						<li><a href="crearPlaylistNueva.php" title="Crear Playlist nueva"><span class="glyphicon glyphicon-plus"></span></a></li>
+						<li><a href="" title="Mis Playlist"><span class="glyphicon glyphicon-list"></span></a></li>
+					</ul>
+					
+					<form action="" class="navbar-form navbar-left" role="search">
+						<div id="buscador" style="color: white;" class="form-group">
+							<input type="text" class=" buscador form-control " placeholder="Buscá Playlist o Usuarios" onkeyup="realizarBusqueda(this.value);">
+							<input type="radio" name="filtroPrimario" checked value="filtroUsuario" onchange="habilitaFiltros()">usuario
+							<input type="radio" name="filtroPrimario" value="filtroPlaylist" onchange="habilitaFiltros()">playlist
+							<select id="filtrosPlaylist" name="filtrosPlaylist" style="color:black; display:none;" onchange="realizarBusqueda();">
+							  <option value="nombre" selected>nombre</option>
+							  <option value="genero">genero</option>
+							</select>
+						</div>
+					</form>
+					
+					<ul class="nav navbar-nav navbar-right">
+						<li><a href="#"><img src="../imagenes/sin-título-5.jpg" alt="Perfil" width="30px" class="img-circle" title="Perfil"></a></li>
+						<li><a href="#" class="usuario" title="Perfil">Nombre Usuario</a></li>
+						<li><a href="#"></a></li>
+						
+					</ul>
 				
-		<h1>Bienvenido a la home</h1>
-		
-		<div>		
-				<h2>Hola <?php echo $_SESSION['nombre']; ?> </h2>
-				<br>
-				
-				<div id = "mostrar">
-					<button type = "button" onclick = "verPerfil()" >Ver Perfil</button>
 				</div>	
 				
-				<div id = "perfil">
-				</div>
-			
-				<a href = "registro.php"> Alta </a>
-				<br>
-				<a href = "segunda.php"> Baja </a>
-				<br>
-				<a href = "modificar.php"> Modificacion </a>
-				<br>
-				<a href = "segunda.php"> Segunda </a>
-				<br>
-				<a href = "logout.php"> Logout </a>	
-		</div>
-		
-		<div>
-			<form method = "POST" action = "home.php">
-				<h4>Buscar usuario</h4>
-				<input type = "text" name = "nombre"></input>
-				<input type = "submit" value = "Buscar">
-			</form>
-			
+			</div>
+				
+		</nav>
+		<div id="todasMisPlaylist" style="margin-top: 200px;">
+			<h2>mis playlist:</h2><br>
 			<?php
-
-			if(isset($_POST['nombre']))
-					{
-					$nombre = $_POST['nombre'];
-					$db = new database();
-					$db->conectar();
-					$db->ver($nombre);
-					}
+				$db = new BaseDatos();
+				$idUsuario = $_SESSION['idUsuario'];
+				if($db->conectar()){
+					$buscaTodasPlaylistDisponibles = "SELECT p.idPlaylist, p.nombre, e.descripcion FROM playlist p JOIN estado e ON e.idEstado = p.codEstado WHERE p.codDueno = $idUsuario AND p.baneo = 0;";
+					$resultadoBuscaTodasPlaylistDisponibles = mysqli_query( $db->conexion, $buscaTodasPlaylistDisponibles) or die("error al buscar todas mis Playlist.");
+				}
+				while($row = mysqli_fetch_assoc($resultadoBuscaTodasPlaylistDisponibles)){
+					echo "<b><a href='miPlaylist.php?idPlaylist=". $row["idPlaylist"] ."'>". $row["nombre"] ."</a></b> " . $row["descripcion"] ."<br>";
 					
-			?>
-					
-		</div>
-		
-		<div id = "siguiendoA">
-			<?php
-			$usuario = $_SESSION['nombre'];
-			$db->siguiendoA($usuario);
+				}
+				
+				echo "<div id='audio'></div>";
+				$db->desconectar();
+			
 			?>
 		</div>
-		
-		<div id = "seguir">
-			<?php
-			$db->paraSeguir();
-			?>		
-		</div>
-	
-	
-		<div id = "denuncias">
-		
-		</div>
-		
-	</body>
 
+	</div>
+		
+	<footer>
+	</footer>
+
+ 	<script src="http://code.jquery.com/jquery-latest.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+</body>
 </html>

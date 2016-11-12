@@ -13,14 +13,23 @@ class playlist {
 										$this->idPlaylist = $idPlaylist;										
 										}
 			
-			public static function crearPlaylist($nombre){
+			public static function purgaPlaylistVacias($idUsuario){
 				$db = new BaseDatos();
-				$date = date('y-m-d');
 				if($db->conectar()){
-						$consultar = "INSERT INTO playlist (nombre, fecha_creacion) VALUES ('$nombre', '$date')";
-						mysqli_query( $db->conexion, $consultar) or die("No se pudo conectar.");
+					$buscaPlaylistVacias = "DELETE FROM playlist WHERE idPlaylist NOT IN ( SELECT DISTINCT codPlaylist FROM contiene) AND codDueno = $idUsuario;";
+					mysqli_query( $db->conexion, $buscaPlaylistVacias) or die("error al purgar playlist");
 				}
 				$db->desconectar();
+			}
+			
+			public static function crearPlaylist($nombre, $codDueno){
+					$db = new BaseDatos();
+					$date = date('y-m-d');
+					if($db->conectar()){
+							$consultar = "INSERT INTO playlist (nombre, fecha_creacion, codDueno) VALUES ('$nombre', '$date', $codDueno)";
+							mysqli_query( $db->conexion, $consultar) or die("No se pudo conectar.");
+					}
+					$db->desconectar();
 			}
 			
 			public static function buscarPlaylist(){ //Esta incompleto, falta pasar como parametro el ID del creador, y asi filtrar solo las que le pertenecen a el.
@@ -104,16 +113,20 @@ class playlist {
 				$db = new BaseDatos();
 				if($db->conectar()){
 						$consultar = "UPDATE playlist SET codEstado = '$codEstado' WHERE idPlaylist = '$this->idPlaylist'";
-						mysqli_query( $db->conexion, $consultar) or die("No se pudo conectar.");
+						
+						
+						mysqli_query( $db->conexion, $consultar) or die("No se pudo insertar Estado.");
 				}
 				$db->desconectar();
 			}
 			
-			public function asignarEsquema($codEsquema){
+			public function asignarEsquema($colorFondo, $colorLetras){
 				$db = new BaseDatos();
 				if($db->conectar()){
-						$consultar = "UPDATE playlist SET codEsquema = '$codEsquema' WHERE idPlaylist = '$this->idPlaylist'";
-						mysqli_query( $db->conexion, $consultar) or die("No se pudo conectar.");
+						$consultar = "UPDATE playlist SET colorFondo = '$colorFondo' WHERE idPlaylist = '$this->idPlaylist'";
+						mysqli_query( $db->conexion, $consultar) or die("No se pudo asignar colorFondo.");
+						$consultar = "UPDATE playlist SET colorLetras = '$colorLetras' WHERE idPlaylist = '$this->idPlaylist'";
+						mysqli_query( $db->conexion, $consultar) or die("No se pudo asignar colorLetras.");
 				}
 				$db->desconectar();
 			}
@@ -121,8 +134,9 @@ class playlist {
 			public function asignarGenero($codGenero){ 
 				$db = new BaseDatos();
 				if($db->conectar()){
-						$consultar = "INSERT INTO pertenece (codElemento, codGenero) VALUES ('$this->idPlaylist', '$codGenero')";
-						mysqli_query( $db->conexion, $consultar) or die("No se pudo conectar.");
+						$consultar = "UPDATE playlist SET codGenero = '$codGenero' WHERE idPlaylist = '$this->idPlaylist'";
+						
+						mysqli_query( $db->conexion, $consultar) or die("No se pudo insertar Genero.");
 				}
 				$db->desconectar();
 			}
@@ -162,8 +176,22 @@ class playlist {
 				$db = new BaseDatos();
 				if($db->conectar()){
 						$borrarCancion = "DELETE FROM contiene WHERE codCancion = '$idCancion' AND codPlaylist = '$this->idPlaylist'";
-						mysqli_query( $db->conexion, $borrarCancion) or die("No se pudo conectar.");
-				}
+						if(mysqli_query( $db->conexion, $borrarCancion) or die("No se pudo conectar.")){
+								return true;
+							} else return false;
+						}  
+				$db->desconectar();
+			}
+			
+			public function verificaMiPlaylist($idUsuario){ //verifica que el codDueño del Idplaylist del construct sea igual al IdUsuario del parametro.
+				
+				$db = new BaseDatos();
+				if($db->conectar()){
+						$buscaPlaylist = "SELECT idPlaylist, codDueno FROM playlist WHERE idPlaylist = '$this->idPlaylist' AND codDueno = $idUsuario";
+						if(mysqli_query( $db->conexion, $buscaPlaylist) or die("No se pudo corroborar.")){
+								return true;
+							} else return false;
+						}  
 				$db->desconectar();
 			}
 			
