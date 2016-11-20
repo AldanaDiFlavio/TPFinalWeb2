@@ -58,13 +58,23 @@ h1{
 	margin-bottom: 10px;
 }
 
-.formulario{
+.top5{
 	background: rgba(255,255,255,0.85);
 }
 
+.musicPlayer{
+	margin-top: 20px;
+}
+
+.formulario{
+	background: rgba(255,255,255,0.85);
+	height: 450px;
+	margin-bottom: 100px;
+}
+
 .form{	
-	width: 70%;
-	padding: 5%;
+	padding: 4.5%;
+	margin-bottom: 20px;
 }
 
 .form input, h3, button{
@@ -86,7 +96,7 @@ h1{
 
 footer{
 	background: rgba(0, 0, 0, 0.75);
-	position: absolute; 
+	position: fixed; 
 	bottom: 0%; 
 	width: 100%;
 }

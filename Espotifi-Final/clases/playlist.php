@@ -180,27 +180,62 @@ class playlist {
 			
 			public static function todasMisPlaylist($idUsuario, $idUsuarioSession){ //Lista todas las playlist del idUsuario.
 				$db = new BaseDatos();
-				if($db->conectar()){
-					if ($idUsuario == $idUsuarioSession){
-					$buscaTodasPlaylistDisponibles = "SELECT p.idPlaylist, p.nombre, e.descripcion FROM playlist p JOIN estado e ON e.idEstado = p.codEstado WHERE p.codDueno = $idUsuario AND p.baneo = 0;";
-					} else {
-							$buscarSiSonSeguidores = "SELECT * FROM sigue WHERE idUsuariojefe = $idUsuario AND idUsuarioSeguidor = $idUsuarioSession;";
-							$resultado = mysqli_query( $db->conexion, $buscarSiSonSeguidores) or die("error al buscar si son seguidores.");
-							$totalFilas =  mysqli_num_rows($resultado);
-							if($totalFilas != 0){
-								$buscaTodasPlaylistDisponibles = "SELECT p.idPlaylist, p.nombre, e.descripcion FROM playlist p JOIN estado e ON e.idEstado = p.codEstado WHERE p.codDueno = $idUsuario AND p.baneo = 0 AND e.idEstado != 1;";
-							} else $buscaTodasPlaylistDisponibles = "SELECT p.idPlaylist, p.nombre, e.descripcion FROM playlist p JOIN estado e ON e.idEstado = p.codEstado WHERE p.codDueno = $idUsuario AND p.baneo = 0 AND e.idEstado = 3;";
-
-						}
-					$resultadoBuscaTodasPlaylistDisponibles = mysqli_query( $db->conexion, $buscaTodasPlaylistDisponibles) or die("error al buscar todas mis Playlist.");
-				}
-				while($row = mysqli_fetch_assoc($resultadoBuscaTodasPlaylistDisponibles)){
-					echo "<b><a href='miPlaylist.php?idPlaylist=". $row["idPlaylist"] ."'>". $row["nombre"] ."</a></b> " . $row["descripcion"] ."<br>";
-					
-				}
-				echo "<div id='audio'></div>";
-				$db->desconectar();
+				
+				if (isset($_SESSION['admin'])){ $admin = 'true'; } else  $admin = 'false'; 				
+					if ($admin == 'false'){ //sino es administrador
+						if($db->conectar()){
+							if ($idUsuario == $idUsuarioSession){
+								$buscaTodasPlaylistDisponibles = "SELECT p.idPlaylist, p.nombre, e.descripcion, cantidad_votos FROM playlist p JOIN estado e ON e.idEstado = p.codEstado WHERE p.codDueno = $idUsuario AND p.baneo = 0;";
+							} else {
+								$buscarSiSonSeguidores = "SELECT * FROM sigue WHERE idUsuariojefe = $idUsuario AND idUsuarioSeguidor = $idUsuarioSession;";
+								$resultado = mysqli_query( $db->conexion, $buscarSiSonSeguidores) or die("error al buscar si son seguidores.");
+								$totalFilas =  mysqli_num_rows($resultado);
+								if($totalFilas != 0){
+									$buscaTodasPlaylistDisponibles = "SELECT p.idPlaylist, p.nombre, e.descripcion, cantidad_votos FROM playlist p JOIN estado e ON e.idEstado = p.codEstado WHERE p.codDueno = $idUsuario AND p.baneo = 0 AND e.idEstado != 1;";
+								} else $buscaTodasPlaylistDisponibles = "SELECT p.idPlaylist, p.nombre, e.descripcion, cantidad_votos FROM playlist p JOIN estado e ON e.idEstado = p.codEstado WHERE p.codDueno = $idUsuario AND p.baneo = 0 AND e.idEstado = 3;";
+							}
+							$resultadoBuscaTodasPlaylistDisponibles = mysqli_query( $db->conexion, $buscaTodasPlaylistDisponibles) or die("error al buscar todas mis Playlist.");
+							while($row = mysqli_fetch_assoc($resultadoBuscaTodasPlaylistDisponibles)){
+								echo "<b><a href='miPlaylist.php?idPlaylist=". $row["idPlaylist"] ."'>". $row["nombre"] ."</a></b> " . $row["descripcion"] ." (Votos: ". $row["cantidad_votos"] .")<br>";						
+							}
+							echo "<div id='audio'></div>";
+							$db->desconectar();
+						}						
+					} if ($admin == 'true'){ //si es administador
+						
+						if($db->conectar()){
+							if ($idUsuario == $idUsuarioSession){
+								
+								$buscaTodasPlaylistDisponibles = "SELECT p.idPlaylist, p.nombre, e.descripcion, cantidad_votos, baneo FROM playlist p JOIN estado e ON e.idEstado = p.codEstado WHERE p.codDueno = $idUsuario;";
+								} else {
+										$buscarSiSonSeguidores = "SELECT * FROM sigue WHERE idUsuariojefe = $idUsuario AND idUsuarioSeguidor = $idUsuarioSession;";
+										$resultado = mysqli_query( $db->conexion, $buscarSiSonSeguidores) or die("error al buscar si son seguidores.");
+										$totalFilas =  mysqli_num_rows($resultado);
+										if($totalFilas != 0){
+											$buscaTodasPlaylistDisponibles = "SELECT p.idPlaylist, p.nombre, e.descripcion, cantidad_votos, baneo FROM playlist p JOIN estado e ON e.idEstado = p.codEstado WHERE p.codDueno = $idUsuario;";
+										} else $buscaTodasPlaylistDisponibles = "SELECT p.idPlaylist, p.nombre, e.descripcion, cantidad_votos, baneo FROM playlist p JOIN estado e ON e.idEstado = p.codEstado WHERE p.codDueno = $idUsuario;";
+										}
+								$resultadoBuscaTodasPlaylistDisponibles = mysqli_query( $db->conexion, $buscaTodasPlaylistDisponibles) or die("error al buscar todas mis Playlist.");
+							
+							while($row = mysqli_fetch_assoc($resultadoBuscaTodasPlaylistDisponibles)){
+								echo "<b><a href='miPlaylist.php?idPlaylist=". $row["idPlaylist"] ."'>". $row["nombre"] ."</a></b> " . $row["descripcion"] ." (Votos: ". $row["cantidad_votos"] .")";									
+								if ($row['baneo'] == 1){ 
+									echo "<a id='". $row["idPlaylist"] ."' href='#' onclick='banearPlaylist(". $row["idPlaylist"] .")'><span  class='glyphicon glyphicon-eye-close' ></span></a><br>";									
+								} else {
+									echo "<a id='". $row["idPlaylist"] ."' href='#' onclick='banearPlaylist(". $row["idPlaylist"] .")' ><span  class='glyphicon glyphicon-eye-open' ></span></a><br>";
+								}
+							}
+							
+							echo "<div id='audio'></div>";
+							$db->desconectar();
+						}																				
+					}
 			}
+			
+			
+			
+			
+			
 			
 			public function sumaReproduccion($idUsuario){		
 				$db = new BaseDatos();
