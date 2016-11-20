@@ -1,26 +1,33 @@
 <?php
 	session_start();
-	//$_SESSION['idUsuario'] = 2;
-	include_once('../clases/playlist.php');
-	include_once('../clases/usuario.php');
-	include_once('../clases/cancion.php');
+	if ($_SESSION['login'] == "on")
+		{
+			include_once('../clases/playlist.php');
+			include_once('../clases/usuario.php');
+			include_once('../clases/cancion.php');
+			include_once('../clases/administrador.php');
+			
+			playlist::purgaPlaylistVacias($_SESSION['idUsuario']);
+			
+			$idUsuarioRecibido = $_REQUEST['idUsuario'];
+			
+			$usuarioSession = new usuario($_SESSION['idUsuario']);
+			$nombreSession = $usuarioSession->armarUsuario();
+			
+			if ($_SESSION['idUsuario'] == $idUsuarioRecibido){
+				$IdPerfilActual = $_SESSION['idUsuario'];
+				
+				
+			} else {
+				$IdPerfilActual = $idUsuarioRecibido;
+				$usuarioPerfil = new usuario($IdPerfilActual);
+				$nombrePerfil = $usuarioPerfil->armarUsuario();
+				
+			}
+		}else{
+			 header('location: ../html/index.php'); 
+			 }  
 	
-	playlist::purgaPlaylistVacias($_SESSION['idUsuario']);
-	
-	$idUsuarioRecibido = $_REQUEST['idUsuario'];
-	
-	$usuarioSession = new usuario($_SESSION['idUsuario']);
-	$nombreSession = $usuarioSession->armarUsuario();
-	
-	if ($_SESSION['idUsuario'] == $idUsuarioRecibido){
-		$IdPerfilActual = $_SESSION['idUsuario'];
-		
-		
-	} else {
-		$IdPerfilActual = $idUsuarioRecibido;
-		$usuarioPerfil = new usuario($IdPerfilActual);
-		$nombrePerfil = $usuarioPerfil->armarUsuario();
-	}
 	
 	
 	
@@ -40,11 +47,13 @@
 	<link rel="shortcut icon" type="image/x-icon" href="../imagenes/espotifi.ico">
 	<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
 	<script type="text/javascript" src="javaScript/funcionesHome.js"></script>
+	<script type="text/javascript" src="javaScript/funcionesAdministrador.js"></script>
 	</head>
 <body>
 	
 	<div class="container">
-		<nav class="navbar navbar-default navbar-fixed-top navbar-inverse">
+		
+		<nav class="navbar navbar-default navbar-fixed-top navbar-inverse" style="<?php if ($_SESSION['admin'] == 'true'){ echo "display: none;"; } ?>">
 			<div class="container-fluid">
 				<div class="navbar-header">
 					<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar"> 
@@ -103,23 +112,27 @@
 						$resultadoBuscarSeguidor = mysqli_query( $db->conexion, $buscarSeguidor) or die("error al buscar seguidor.");
 							
 						$totalFilasSeguidor =  mysqli_num_rows($resultadoBuscarSeguidor);
-							
-						if($totalFilasSeguidor != 0){
-							$classSeguidor = "glyphicon glyphicon-star";
-						} else $classSeguidor = "glyphicon glyphicon-star-empty";
-						echo "<a href='#' onclick='seguir(". $IdPerfilActual . ",". $_SESSION['idUsuario'] .");'><span id='seguir' class='". $classSeguidor ."' /></a>";
+						
+						if (isset($_SESSION['admin']) != 'true'){  						
+							if($totalFilasSeguidor != 0){
+								$classSeguidor = "glyphicon glyphicon-star";
+							} else $classSeguidor = "glyphicon glyphicon-star-empty";
+							echo "<a href='#' onclick='seguir(". $IdPerfilActual . ",". $_SESSION['idUsuario'] .");'><span id='seguir' class='". $classSeguidor ."' /></a>";
+						}
 					}
+					
 					
 					
 					
 					$db->desconectar();
 				}
 				echo "<br>";
-				playlist::todasMisPlaylist($IdPerfilActual, $_SESSION['idUsuario']);
+				echo"<div id='todasMisPlaylist'>"; playlist::todasMisPlaylist($IdPerfilActual, $_SESSION['idUsuario']);echo "</dvi>";
 			?>
 		</div>
 		<div id="misCanciones">
 		<?php
+			
 			if (!isset($nombrePerfil)){ 
 				echo "<b>Mis canciones</b><br>";
 				cancion::todasMisCanciones($_SESSION['idUsuario']);
@@ -142,16 +155,18 @@
 			
 		</div>
 		<?php
-			if (isset($nombrePerfil)){
-				echo "<a href='#' onclick='editarElemento(selectDenuncias, okDenuncias);'>denunciar</a>
-						<select id='selectDenuncias' style='display:none;'>
-							<option value='0'>Nombres inapropiados</option>
-							<option value='1'>copia playlist</option>
-						</select>
-						<a onclick='editarElemento(selectDenuncias, okDenuncias);'><span onclick='enviarDenuncia(selectDenuncias, ". $IdPerfilActual .")' id='okDenuncias' class='glyphicon glyphicon-send' aria-hidden='true' style='display:none;'></span></a><br>";
-				
-				echo "<a href='home.php?idUsuario=". $_SESSION['idUsuario'] ."'>volver a mi perfil</a>";
-			}
+			if (isset($_SESSION['admin']) != 'true'){  
+				if (isset($nombrePerfil)){
+					echo "<a href='#' onclick='editarElemento(selectDenuncias, okDenuncias);'>denunciar</a>
+							<select id='selectDenuncias' style='display:none;'>
+								<option value='0'>Nombres inapropiados</option>
+								<option value='1'>copia playlist</option>
+							</select>
+							<a onclick='editarElemento(selectDenuncias, okDenuncias);'><span onclick='enviarDenuncia(selectDenuncias, ". $IdPerfilActual .")' id='okDenuncias' class='glyphicon glyphicon-send' aria-hidden='true' style='display:none;'></span></a><br>";
+					
+					echo "<a href='home.php?idUsuario=". $_SESSION['idUsuario'] ."'>volver a mi perfil</a>";
+				}
+			}	
 		?>
 <div id="busquedas" style="margin-top: 50px;">
 		</div>

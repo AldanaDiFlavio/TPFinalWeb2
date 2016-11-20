@@ -1,11 +1,20 @@
 <?php 
 	session_start(); 
-	$idPlaylist = $_REQUEST["idPlaylist"];
-	include_once('../clases/db.php');
-	include_once('../clases/playlist.php');
 	
-	$sumaReproduccion = new Playlist($idPlaylist);
-	$sumaReproduccion -> sumaReproduccion($_SESSION['idUsuario']);
+	if ($_SESSION['login'] == "on")
+		{
+		
+		$idPlaylist = $_REQUEST["idPlaylist"];
+		include_once('../clases/db.php');
+		include_once('../clases/playlist.php');
+		
+		$sumaReproduccion = new Playlist($idPlaylist);
+		$sumaReproduccion -> sumaReproduccion($_SESSION['idUsuario']);
+		}else{
+			 header('location: ../html/index.php'); 
+			 }  
+			 
+	
 		
 ?>
 
@@ -47,17 +56,19 @@
 					
 					if ($row["codDueno"] != $_SESSION['idUsuario']){
 						$idUsuario = $_SESSION['idUsuario'];
-						$buscarVoto = "SELECT codPlaylist FROM vota WHERE codPlaylist = ". $idPlaylist ." AND codUsuario = " . $idUsuario ."";
-						$resultadoBuscarVoto = mysqli_query( $db->conexion, $buscarVoto) or die("error al buscar los votos.");
-						
-						
-						$totalFilas =  mysqli_num_rows($resultadoBuscarVoto);
-						if($totalFilas != 0){
-						$classVoto = "glyphicon glyphicon-collapse-up";
-						} else $classVoto = "glyphicon glyphicon-unchecked";
-						
-						echo "<a href='#' onclick='sumarVoto(". $idPlaylist . ",". $_SESSION['idUsuario'] .");'><span id='voto' class='". $classVoto ."' /></a>";
-
+							if (isset($_SESSION['admin']) != 'true'){ 
+							$buscarVoto = "SELECT codPlaylist FROM vota WHERE codPlaylist = ". $idPlaylist ." AND codUsuario = " . $idUsuario ."";
+							$resultadoBuscarVoto = mysqli_query( $db->conexion, $buscarVoto) or die("error al buscar los votos.");
+							
+							
+							$totalFilas =  mysqli_num_rows($resultadoBuscarVoto);
+							
+							if($totalFilas != 0){
+							$classVoto = "glyphicon glyphicon-collapse-up";
+							} else $classVoto = "glyphicon glyphicon-unchecked";
+							
+							echo "<a href='#' onclick='sumarVoto(". $idPlaylist . ",". $_SESSION['idUsuario'] .");'><span id='voto' class='". $classVoto ."' /></a>";
+						}
 					}
 					
 					if ($row["codDueno"] == $_SESSION['idUsuario']){
@@ -154,15 +165,15 @@
 					
 					if ($row["codDueno"] == $_SESSION['idUsuario']){
 						echo "<a href='funcionesMiPlaylist.php?funcion=eliminarPlaylist&idPlaylist=". $idPlaylist ."'><input type='button' value='eliminar'></input></a>";
-					}
+					
 					echo "
 					<form style='color: black;' action='funcionesMiPlaylist.php?funcion=subirFoto&idPlaylist=". $idPlaylist ."' method='post' enctype='multipart/form-data'>
 						<input name='file' type='file'>
 						<input id='submit'type='submit' value='Subir/cambiar foto'>
 					</form>
-					";
+					";}
 					if ($row['fotoPath'] != "0" ){
-					echo "<img src='../". $row["fotoPath"] ."' height='100' width='100' >";
+					echo "<img src='../". $row["fotoPath"] ."' height='400' width='400' >";
 					}
 				}
 	

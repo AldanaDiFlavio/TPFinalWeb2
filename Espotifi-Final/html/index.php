@@ -9,7 +9,7 @@
 																	$_SESSION["reg"]="false";
 																	echo "Registro completo, verifique su correo para terminar el registro";
 																	}
-									}
+								}
 		if(isset($_SESSION["habilitado"]))	{
 											if($_SESSION["habilitado"] == "false")	{
 																					$_SESSION["habilitado"] = "true";
@@ -20,11 +20,12 @@
 										if ($_SESSION["valida"]=="true")	{
 																			$_SESSION["valida"]="false";
 																			echo "El usuario o contrasena son incorrectos";
-										}															}
+											}															
+										}
 ?>
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
 	<meta charset="UTF-8">
 	<title>Espotifí</title>
@@ -54,7 +55,7 @@
 							<button tyle="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
 						</div>
 						<div class="modal-body">
-						<div></div>
+						<div><img src="../imagenes/espotifi-iso.png" class="center-block" width="25px;"></div>
 							<form  method = "POST" action = "valida.php">
 								<input class="form-control" placeholder="Nombre de usuario" type = "text" name = "nombre" value = 
 										<?php
@@ -68,15 +69,12 @@
 										?> >
 								</input> 
 								<br/>
-								<input name="contrasena" class="form-control" type="password" placeholder="password">
-								
-								
+								<input name="contrasena" class="form-control" type="password" placeholder="password">								
+								<br/>
+								<hr/>
 								<a href="home.php"><input type = "submit" value = "Ingresar" class="btn btn-success"></a>
 								<input type = "reset"  class="btn btn-success" value = "Borrar">
 							</form>
-						</div>
-						<div class="modal-footer">
-							
 						</div>
 					</div>
 				</div>
@@ -87,15 +85,16 @@
 	
 	<section>
 		<div class="container">
-			<div class="col-md-7">
+			<div class="col-md-12">
 				<h1>Top 5 <span class="glyphicon glyphicon-heart"></span></h1>
-				<div id="musicPlayer">
+
+				<div class= "top5" id="musicPlayer">
 					<div class="row">
 
-						<div id="musicLists" class="col-md-10">
+						<div id="musicLists" class="musicPlayer col-md-10 col-md-offset-1">
 
 					
-						<div id="musicLists" >
+						<div id="musicLists">
 
 							<div class="panel with-nav-tabs panel-default">
 								<div class="panel-heading">
@@ -171,32 +170,21 @@
 					</div>
 				</div>	
 			</div>
-			<div class="col-md-5">
-				<div class="pull-right">
-				<h1>Registrate<br/>para<br/>más <a href="registro.php"><span class="glyphicon glyphicon-menu-right"></span></a></h1>
-				</div>
-			</div>
 		</div>
 	</section>
 	<div class="clearfix"></div>
 	<footer>
 		<div class="container">		
-			<img class="center-block" src="imagenes/espotifi-iso.png" alt="Espotifi" width="25px">
+			<img class="center-block" src="../imagenes/espotifi-iso.png" alt="Espotifi" width="25px">
 			<div class="row">
-				<div class="col-md-4">
-					<p> </p>				
-				</div>
-				<div class="col-md-4 col-md-offset-1">
+				<div class="col-md-4 col-md-offset-5">
 					<p>Espotifi - Programación Web 2 </p>				
-				</div>
-				<div class="col-md-4">
-					<p> </p>				
 				</div>
 			</div>
 	</footer>
 	<!-- Latest compiled and minified JavaScript -->
 	<script src="http://code.jquery.com/jquery-latest.js"></script>
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
-	<script src="js/imageRandom.js"></script>
+	<script src="javaScript/imageRandom.js"></script>
 </body>
 </html>

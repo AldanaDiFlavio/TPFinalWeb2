@@ -55,6 +55,7 @@ if (empty($nombre) || empty($contrasena))
 											}
 											else 
 													{
+														$_SESSION['idUsuario'] = $inf["idUsuario"];
 													if ($recordar == "true")
 																{
 																setcookie("nombre", $nombre, time()+60*60*20, "/");
@@ -81,6 +82,7 @@ if (empty($nombre) || empty($contrasena))
 								}
 								else{
 									//echo "El usuario o contrasena son incorrectos";
+									
 									$_SESSION["valida"]="true";
 									header('location: index.php');
 									}

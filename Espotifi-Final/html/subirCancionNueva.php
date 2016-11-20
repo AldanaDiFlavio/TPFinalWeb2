@@ -1,11 +1,16 @@
 <?php
 	session_start();
+	if ($_SESSION['login'] == "on")
+		{
+		include_once('../clases/db.php');
 	
-	include_once('../clases/db.php');
+		if(isset($_REQUEST['alerta'])){
+			echo "<script type='text/javascript'>alert('". $_REQUEST['alerta'] ."');</script>";
+		}
+		}else{
+			 header('location: ../html/index.php'); 
+			 }  
 	
-	if(isset($_REQUEST['alerta'])){
-		echo "<script type='text/javascript'>alert('". $_REQUEST['alerta'] ."');</script>";
-	}
 ?>
 
 <!DOCTYPE html>

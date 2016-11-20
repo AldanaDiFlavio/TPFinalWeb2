@@ -87,7 +87,7 @@
 		$extension = strtolower(substr($name, strpos($name, '.')+1));
 		$type = $_FILES['file']['type'];
 		$size = $_FILES['file']['size'];
-		$max_size = 50331648; //hasta 6MB = 50331648 bytes
+		$max_size = 8388608; //hasta 8MB = 8388608 bytes
 		$tmp_name = $_FILES['file']['tmp_name'];
 
 		if(isset($name)){
@@ -103,7 +103,7 @@
 						}
 					}
 					else{
-						$alerta = "Debe ser menor a 5 MB.";
+						$alerta = "Debe ser menor a 8 MB.";
 						header("location: subirCancionNueva.php?alerta=". $alerta ."") ; 
 					}
 					

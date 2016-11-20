@@ -250,28 +250,27 @@
 				if($extension == 'jpg' || $extension == 'png'){
 						if($size <= $max_size){
 						if(move_uploaded_file($tmp_name, $location)){
-						//playlist::insertarCancion($name, $_REQUEST['album'], $_REQUEST['artista'],$_REQUEST['generos'], $_SESSION['idUsuario']);
 						$pn = new playlist($idPlaylist);
 						$pn->insertarFoto($name);
-						header("location: home.php?idUsuario=". $_SESSION["idUsuario"] ."") ; 
+						header("location: miplaylist.php?idPlaylist=". $idPlaylist ."") ; 
 						}
 					}
 					else{
 						$alerta = "Debe ser menor a 5 MB.";
-						header("location: home.php?idUsuario=". $_SESSION["idUsuario"] ."&alerta=". $alerta ."") ; 
+						header("location: miplaylist.php?idPlaylist=". $idPlaylist ."&alerta=". $alerta ."") ; 
 					}
 					
 				}
 				else{
 					$alerta = "Debe ser formato png o jpg.";
-					header("location: home.php?idUsuario=". $_SESSION["idUsuario"] ."&alerta=". $alerta ."") ; 
+					header("location: miplaylist.php?idPlaylist=". $idPlaylist ."&alerta=". $alerta ."") ; 
 				}
 
 			}
 			else{
 				$alerta = "Por favor seleccione un archivo.";
 				
-				header("location: home.php?idUsuario=". $_SESSION["idUsuario"] ."&alerta=". $alerta .""); 
+				header("location: miplaylist.php?idPlaylist=". $idPlaylist ."&alerta=". $alerta .""); 
 			}
 		}
 		
