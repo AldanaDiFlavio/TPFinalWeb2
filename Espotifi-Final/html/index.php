@@ -69,7 +69,7 @@
 										?> >
 								</input> 
 								<br/>
-								<input name="contrasena" class="form-control" type="password" placeholder="password">								
+								<input name="contrasena" class="form-control" type="password" placeholder="Password">								
 								<br/>
 								<hr/>
 								<a href="home.php"><input type = "submit" value = "Ingresar" class="btn btn-success"></a>

@@ -299,7 +299,7 @@ CREATE TABLE `usuario` (
   `nombre` varchar(20) NOT NULL,
   `contrasena` varchar(55) NOT NULL,
   `email` varchar(30) NOT NULL,
-  `ubicacion` varchar(55) NOT NULL,
+  `ubicacion` varchar(100) NOT NULL,
   `administrador` varchar(10) NOT NULL DEFAULT 'false',
   `habilitado` varchar(10) NOT NULL DEFAULT 'false',
   `fecha_creacion` date NOT NULL,

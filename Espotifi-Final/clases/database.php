@@ -32,14 +32,14 @@ class database	{
 						$ver = mysqli_fetch_assoc($query);
 						
 						echo "<br>Id: " . $ver["idUsuario"] .
-							"<br>Nombre: " . $ver["Nombre"] . 
-							"<br>Contrasena: " . $ver["Contrasena"] . 
+							"<br>Nombre: " . $ver["nombre"] . 
+							//"<br>Contrasena: " . $ver["contrasena"] . 
 							"<br>Email: " . $ver["email"] . 
-							"<br>Administrador: " . $ver["Administrador"] . 
-							"<br>Habilitado: " . $ver["Habilitado"] . 
-							"<br>Ubicacion: " . $ver["Ubicacion"] .
-							"<br>Fecha: " . $ver["Fecha"] .
-							"<br>Denuncias: " . $ver["Denuncias"];
+							"<br>Administrador: " . $ver["administrador"] . 
+							"<br>Habilitado: " . $ver["habilitado"] . 
+							"<br>Ubicacion: " . $ver["ubicacion"] .
+							"<br>Fecha de alta: " . $ver["fecha_creacion"] .
+							"<br>Denuncias: " . $ver["denuncias"];
 						}			
 
 					
@@ -99,14 +99,14 @@ class database	{
 																
 								echo "<div style= 'text-align:center; float: left; border-style: solid; border-width: 0px; margin: 5px;' >";	
 										echo 	"<br>Id: " . $ver["idUsuario"] .
-												"<br>Nombre: " . $ver["Nombre"] . 
-												"<br>Contrasena: " . $ver["Contrasena"] . 
+												"<br>Nombre: " . $ver["nombre"] . 
+												"<br>Contrasena: " . $ver["contrasena"] . 
 												"<br>Email: " . $ver["email"] . 
-												"<br>Administrador: " . $ver["Administrador"] . 
-												"<br>Habilitado: " . $ver["Habilitado"] . 
-												"<br>Ubicacion: " . $ver["Ubicacion"] .
-												"<br>Fecha: " . $ver["Fecha"] .
-												"<br>Denuncias: " . $ver["Denuncias"];
+												"<br>Administrador: " . $ver["administrador"] . 
+												"<br>Habilitado: " . $ver["habilitado"] . 
+												"<br>Ubicacion: " . $ver["ubicacion"] .
+												"<br>Fecha de alta: " . $ver["fecha_creacion"] .
+												"<br>Denuncias: " . $ver["denuncias"];
 										echo '<br><button type = "button" onclick = "banear(this.value)" value ='.$nombre.'> Banear </button>';
 										echo '<button type = "button" onclick = "verDenuncias(this.value)" value ='.$nombre.'> Ver denuncias </button>';
 										//echo '<br><button type = "button" onclick = "exportarPDF(this.value)" value ='.$nombre.'> Exportar </button>';

@@ -27,9 +27,9 @@
 		}else{
 			 header('location: ../html/index.php'); 
 			 }  
-	
-	
-	
+	//para ver el perfil
+	$_SESSION['nombreSession'] = $nombreSession;
+	$_SESSION['perfil'] = "Ver Perfil";	
 	
 	
 	
@@ -48,6 +48,20 @@
 	<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
 	<script type="text/javascript" src="javaScript/funcionesHome.js"></script>
 	<script type="text/javascript" src="javaScript/funcionesAdministrador.js"></script>
+	<script>			
+	function verPerfil(){
+						xhttp = new XMLHttpRequest();
+						xhttp.onreadystatechange = function()	
+							{
+							if (this.readyState == 4 && this.status == 200)
+								{
+								document.getElementById("perfil").innerHTML = this.responseText;
+								}
+							};
+						xhttp.open("GET", "../php/verperfil.php", "true");
+						xhttp.send();
+						}
+	</script>
 	</head>
 <body>
 	
@@ -87,11 +101,9 @@
 					
 					<ul class="nav navbar-nav navbar-right">
 						<li><a href="#"><img src="../imagenes/sin-título-5.jpg" alt="Perfil" width="30px" class="img-circle" title="Perfil"></a></li>
-						<li><a href="#" class="usuario" title="Perfil"><?php  echo $nombreSession; ?></a></li>
+						<li><a class="usuario" title="Perfil" onclick = "verPerfil()"><?php  echo $nombreSession; ?></a></li>
 						<li><a href="index.php" class="salir" title="salir">salir</a></li>
-						
 						<li><a href="#"></a></li>
-						
 					</ul>
 				
 				</div>	
@@ -99,6 +111,9 @@
 			</div>
 				
 		</nav>
+		
+		<div id="perfil" style="float: right; margin-top: 50px; ">	</div>	
+		
 		<div id="todasMisPlaylist" style="margin-top: 200px;">
 			<b><?php if (isset($nombrePerfil)){ 
 						echo "Playlist de ". $nombrePerfil. "";
@@ -120,10 +135,7 @@
 							echo "<a href='#' onclick='seguir(". $IdPerfilActual . ",". $_SESSION['idUsuario'] .");'><span id='seguir' class='". $classSeguidor ."' /></a>";
 						}
 					}
-					
-					
-					
-					
+	
 					$db->desconectar();
 				}
 				echo "<br>";

@@ -8,16 +8,102 @@
 	<link rel="stylesheet" type="text/css" href="../css/estilos.css">
 	<link rel="shortcut icon" type="image/x-icon" href="../imagenes/espotifi.ico">
 	<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-	<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDJD_N_jOh_hh32hRQVqPr0Ch14ghe42g0&callback=initMap" type="text/javascript"></script>
-	<script>
-		function loadMap(){
-			var mapOptions = {
-				center:new google.maps.LatLng(-34.6686986,-58.5614947),	zoom:12, mapTypeId: google.maps.MapTypeId.ROADMAP
-			};
-			var map = new google.maps.Map(document.getElementById("mapa"),mapOptions);
-		}
-				
-	</script>
+	<!--scripts para Google Maps -->
+	<script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?&sensor=true"></script>
+	<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDJD_N_jOh_hh32hRQVqPr0Ch14ghe42g0&callback=initMap"
+	type="text/javascript"></script>
+	<!--Google Maps -->
+	<script type="text/javascript">
+			var map;
+			function loadMap() 
+					{
+					var mapOptions = 	{
+										zoom:12, 
+										mapTypeId:google.maps.MapTypeId.ROADMAP
+					  					};
+					map = new google.maps.Map(document.getElementById("mapa"),mapOptions);
+					
+					if (navigator.geolocation)
+						{
+						//Hago el CallBack a mostrarLocalizacion
+						navigator.geolocation.getCurrentPosition(mostrarLocalizacion,manejadorDeError);
+						}else	{
+								//Caso contrario muestro error
+								alert("Su navegador no soporta Geolocalizacion");
+								}
+					
+					function mostrarLocalizacion(posicion)
+							{
+							var pos = new google.maps.LatLng(posicion.coords.latitude,posicion.coords.longitude);
+							//crea el marcador en la ubicacion del mapa donde se hizo click
+							var marker = new google.maps.Marker
+									({
+									position:pos,
+									map: map,
+									//draggable: true
+									});
+							map.setCenter(pos);
+							}
+						
+						var geocoder = new google.maps.Geocoder();							
+						
+						google.maps.event.addListener(map, 'click', function(event) 
+							{
+							geocoder.geocode(
+											{'latLng': event.latLng}, function(results, status)
+													{
+													if (status == google.maps.GeocoderStatus.OK) 
+															{
+															if (results[0])
+																{										
+																//se crea una variable ubicacion y se asigna ese valor al input "geo"
+																var ubicacion = results[0].formatted_address;
+																document.getElementById('geo').value = ubicacion;
+																pos = results[0].geometry.location;
+																map.setCenter(pos);
+																var marker = new google.maps.Marker
+																		({
+																		position:pos,
+																		map: map,
+																		});
+																//marker.setMap(null);	
+																}
+															}
+													}
+											);
+							});
+
+					    function manejadorDeError(error) {
+
+							   switch(error.code)
+								{
+									case error.PERMISSION_DENIED: alert("El usuario no permite compartir datos de geolocalizacion");
+									break;
+
+									case error.POSITION_UNAVAILABLE: alert("Imposible detectar la posicio actual");
+									break;
+
+									case error.TIMEOUT: alert("La posicion debe recuperar el tiempo de espera");
+									break;
+
+									default: alert("Error desconocido");
+									break;
+								}
+								var opciones = {
+								  map: mapa,
+								  position: new google.maps.LatLng(60, 105),
+								  content: content
+								};
+								var infowindow = new google.maps.InfoWindow(opciones);
+								map.setCenter(opciones.position);
+						  }
+		
+					}
+
+					google.maps.event.addDomListener(window, 'load', loadMap);
+	</script>	
+	
+	
 </head>
 <body  onload="imageRandom(); loadMap()">
 	<div class="encabezado">
@@ -41,8 +127,11 @@
 							</br>
 							<input class="form-control" name="email" type="text" placeholder="ejemplo@mail.com" />
 							<br/>
+							<input class="form-control" name="geo" id="geo" type="text" placeholder="Seleccione su ubicacion en el mapa" />
+							<br/>
 							<button type="submit" class="btn btn-success" value="Aceptar">¡Registrate!</button>
 						</div>
+
 						<div class="col-md-6">
 							<div class="img-responsive mapa" id ="mapa" style = "width: 450px; height: 350px;"></div>
 						</div>
