@@ -13,12 +13,13 @@ if ($_SESSION['perfil'] == "Ver Perfil")
 		$db = new database();
 		$db->conectar();
 		$db->ver($nombre);
+		$db->close();
 		}
 		else if ($_SESSION['perfil'] == "Ocultar Perfil")
 				{
 				$_SESSION['perfil'] = "Ver Perfil";	
 				echo "";
 				}
-		$db->close();
+		
 					
 ?>
