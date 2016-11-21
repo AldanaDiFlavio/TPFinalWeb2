@@ -6,6 +6,7 @@
 			include_once('../clases/usuario.php');
 			include_once('../clases/cancion.php');
 			include_once('../clases/administrador.php');
+			include_once('../clases/database.php');
 			
 			playlist::purgaPlaylistVacias($_SESSION['idUsuario']);
 			
@@ -231,8 +232,12 @@
 		<div onload="geocodeLatLng()">
 				<?php
 					
-					$conexion = mysqli_connect("localhost", "root", "mysql153", "web2")
+					$db = new database();
+					$db->conectar();
+					/*
+					$conexion = mysqli_connect("localhost", "root", "", "web2")
 								or die('No se pudo conectar:'  . mysqli_error($conexion));
+					*/
 					$query = mysqli_query($conexion, "SELECT * FROM usuario WHERE nombre LIKE '$nombreSession';") or die ("Fallo la consulta");
 					$ver = mysqli_fetch_assoc($query);
 					//echo "<br>Coordenadas" . $ver["coordenadas"];
