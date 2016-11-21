@@ -44,6 +44,10 @@
 			//document.getElementById('todasMisPlaylist').innerHTML = "playlist - genero";
 			var strURL="./funcionesHome.php?funcion=realizarBusqueda&idUsuario="+idUsuario+"&filtroPrimario="+filtroPlaylist.value+"&filtroSecundario="+filtroSecundarioPlaylist+"&textoBuscado="+textoBuscado;
 		}
+		if (filtroPlaylist.checked == true && filtroSecundarioPlaylist == 'creador') {
+			//document.getElementById('todasMisPlaylist').innerHTML = "playlist - creador";
+			var strURL="./funcionesHome.php?funcion=realizarBusqueda&idUsuario="+idUsuario+"&filtroPrimario="+filtroPlaylist.value+"&filtroSecundario="+filtroSecundarioPlaylist+"&textoBuscado="+textoBuscado;
+		}
 		var req = getXMLHTTP();
 		
 		if (req) {
