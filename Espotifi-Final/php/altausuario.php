@@ -34,7 +34,7 @@ if($nombre!=NULL )	{
 					if($pass1!=NULL && $pass2!=NULL){
 													if($pass1 == $pass2){
 																		$contrasena = md5($pass2);
-																																				
+																			$idUsuario = 0;												
 																		$usuario = new User($idUsuario, $nombre, $contrasena, $email, $administrador, $habilitado,
 																							$ubicacion, $coordenadas, $fecha, $denuncias);
 																																				

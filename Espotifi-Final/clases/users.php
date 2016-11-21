@@ -49,7 +49,7 @@ class user {
 															  '$this->fecha',
 															  '$this->denuncias');";
 								
-										$gg = mysqli_query($db->conexion, $sql) or die("error de registro");
+										$gg = mysqli_query($db->conexion, $sql) or die("error de registrasdo");
 								
 										$db->close();
 										

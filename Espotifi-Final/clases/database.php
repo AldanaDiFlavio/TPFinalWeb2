@@ -1,5 +1,5 @@
 <?php
-require "config.php";
+include_once ('config.php');
 
 class database	{
 				public $conexion;
