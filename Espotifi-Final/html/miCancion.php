@@ -3,9 +3,10 @@
 	$idCancion = $_REQUEST["idCancion"];
 	include_once('../clases/db.php');
 	include_once('../clases/cancion.php');
-	
-	
-		
+	include_once('../clases/usuario.php');
+
+	$usuarioSession = new usuario($_SESSION['idUsuario']);
+			$nombreSession = $usuarioSession->armarUsuario();		
 ?>
 
 <!DOCTYPE html>
@@ -20,13 +21,61 @@
 	<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
 	<script type="text/javascript" src="javaScript/funcionesCancion.js"></script>
 </head>
+
 <body>
 	<div id="container" class="container" class="acciones" >
+		<nav class="navbar navbar-default navbar-fixed-top navbar-inverse" style="<?php if ($_SESSION['admin'] == 'true'){ echo "display: none;"; } ?>">
+			<div class="container-fluid">
+				<div class="navbar-header">
+					<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar"> 
+						<span class="icon-bar"></span>
+						<span class="icon-bar"></span>
+						<span class="icon-bar"></span>
+					</button>
+
+					<a href="home.php" class="navbar-brand"><img src="../imagenes/espotifi-logo2.png" alt="Espotifi" width="120px"></a>
+				</div>
+
+				<div class="collapse navbar-collapse" id="navbar">
+					<ul class="nav navbar-nav">
+						<li><a href="funcionesHome.php?funcion=crearPlaylistNueva" title="Crear Playlist nueva"><span class="glyphicon glyphicon-plus"></span></a></li>
+						
+					</ul>
+					
+					<form action="" class="navbar-form navbar-left" role="search">
+					
+						<div id="buscador" style="color: white;" class="form-group">
+							<input name="busqueda" type="text" class=" buscador form-control " placeholder="Buscá Playlist o Usuarios" onkeyup="realizarBusqueda(this.value, <?php echo $_SESSION['idUsuario']; ?>);">
+							<input type="radio" name="filtroPrimario" checked value="filtroUsuario" onchange="habilitaFiltros()">usuario
+							<input type="radio" name="filtroPrimario" value="filtroPlaylist" onchange="habilitaFiltros()">playlist
+							<select id="filtrosPlaylist" name="filtrosPlaylist" style="color:black; display:none;" onchange="realizarBusqueda(busqueda.value, <?php echo $_SESSION['idUsuario']; ?>);">
+							  <option value="nombre" selected>nombre</option>
+							  <option value="genero">genero</option>
+							  <option value="creador">creador</option>
+							</select>
+						</div>
+						
+					</form>
+					
+					<ul class="nav navbar-nav navbar-right">
+						<li><a href="#"><img src="../imagenes/sin-título-5.jpg" alt="Perfil" width="30px" class="img-circle" title="Perfil"></a></li>
+						<li><a class="usuario" title="Perfil" ><?php  echo $nombreSession; ?></a></li>
+						<li><a href="index.php" class="salir" title="salir">salir</a></li>
+						<li><a href="#"></a></li>
+					</ul>
+				
+				</div>	
+				
+			</div>
+				
+		</nav>
+
+		<div class="container cancion">
 					
 			<?php
 				$db = new BaseDatos();
 				if($db->conectar()){
-					$buscarCancion = "SELECT c.titulo, c.album, c.artista, c.fecha_creacion, gc.descripcion, c.path FROM cancion c JOIN generoCanciones gc ON c.codGenero = gc.idGenero WHERE c.idCancion = $idCancion";
+					$buscarCancion = "SELECT c.idCancion, c.titulo, c.album, c.artista, c.fecha_creacion, gc.descripcion, c.path FROM cancion c JOIN generoCanciones gc ON c.codGenero = gc.idGenero WHERE c.idCancion = $idCancion";
 					$resultadoBuscarCancion = mysqli_query( $db->conexion, $buscarCancion) or die("error al buscar la cancion.");
 				}
 				while($row = mysqli_fetch_assoc($resultadoBuscarCancion)){
@@ -64,17 +113,23 @@
 				
 				
 			
-				echo "<a href='home.php?idUsuario=". $_SESSION['idUsuario'] ."'><input id='volver' type='button' value='volver' ></input></a>";
-				
+				echo "<a href='home.php?idUsuario=". $_SESSION['idUsuario'] ."'><input class='boton btn btn-success' id='volver' type='button' value='confirmar' ></input></a>";
+				echo "<a href='funcionesCancion.php?funcion=eliminarCancion&idCancion=". $idCancion ."'><input class='boton btn btn-success' id='eliminar' type='button' value='eliminar' ></input></a>";
+
 				
 			?>	
+			</div>
 			
-		
-			
-		
 	</div>
 
 	<footer>
+		<div class="container">		
+			<img class="center-block" src="../imagenes/espotifi-iso.png" alt="Espotifi" width="25px">
+			<div class="row">
+				<div class="col-md-4 col-md-offset-5">
+					<p>Espotifi - Programación Web 2 </p>				
+				</div>
+			</div>
 	</footer>
 
  	<script src="http://code.jquery.com/jquery-latest.js"></script>

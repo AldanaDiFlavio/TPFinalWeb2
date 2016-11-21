@@ -1,14 +1,13 @@
 <?php
 	session_start();
-	include_once('../clases/database.php');
-	
 	if ($_SESSION['login'] == "on")
-		{
+		{	
+	
 			include_once('../clases/playlist.php');
 			include_once('../clases/usuario.php');
 			include_once('../clases/cancion.php');
 			include_once('../clases/administrador.php');
-			
+			include_once('../clases/database.php');
 			
 			playlist::purgaPlaylistVacias($_SESSION['idUsuario']);
 			
@@ -30,9 +29,7 @@
 		}else{
 			 header('location: ../html/index.php'); 
 			 }  
-	//para ver el perfil
-	$_SESSION['nombreSession'] = $nombreSession;
-	$_SESSION['perfil'] = "Ver Perfil";	
+	
 	
 	
 	
@@ -46,68 +43,12 @@
 	<title>Espotifí</title>
 	<!-- Latest compiled and minified CSS -->
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
-	<link rel="stylesheet" type="text/css" href="css/estilos.css">
+	<link rel="stylesheet" type="text/css" href="../css/estilos.css">
 	<link rel="shortcut icon" type="image/x-icon" href="../imagenes/espotifi.ico">
 	<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
 	<script type="text/javascript" src="javaScript/funcionesHome.js"></script>
 	<script type="text/javascript" src="javaScript/funcionesAdministrador.js"></script>
-	<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDJD_N_jOh_hh32hRQVqPr0Ch14ghe42g0&callback=initMap"
-	type="text/javascript"></script>
-	<script>			
-	function verPerfil(){
-						xhttp = new XMLHttpRequest();
-						xhttp.onreadystatechange = function()	
-							{
-							if (this.readyState == 4 && this.status == 200)
-								{
-								document.getElementById("perfil").innerHTML = this.responseText;
-								}
-							};
-						xhttp.open("GET", "../php/verperfil.php", "true");
-						xhttp.send();
-						}
-
-	function initMap()	{
-						var map = new google.maps.Map(document.getElementById('map'), {
-						zoom: 8,
-						center: {lat: 40.731, lng: -73.997}
-						});
-						var geocoder = new google.maps.Geocoder;
-						var infowindow = new google.maps.InfoWindow;
-
-						geocodeLatLng(geocoder, map, infowindow);
-						}
-
-	function geocodeLatLng(geocoder, map, infowindow)
-						{
-						var input = document.getElementById('latlng').value;
-						var latlngStr = input.split(',', 2);
-						var latlng = {lat: parseFloat(latlngStr[0]), lng: parseFloat(latlngStr[1])};
-						geocoder.geocode({'location': latlng}, function(results, status)
-							{
-							if (status === google.maps.GeocoderStatus.OK) 
-								{
-								if (results[1]) {
-												map.setZoom(11);
-       
-												var marker = new google.maps.Marker({
-												position: latlng,
-												map: map
-												});
-												map.setCenter(latlng);
-												infowindow.setContent(results[1].formatted_address);
-												infowindow.open(map, marker);
-												} 
-												else	{
-														window.alert('No results found');
-														}
-								} 
-								else{
-									window.alert('Geocoder failed due to: ' + status);
-									}
-							});
-						}
-	</script>
+	
 	
 	</head>
 <body>
@@ -129,7 +70,7 @@
 				<div class="collapse navbar-collapse" id="navbar">
 					<ul class="nav navbar-nav">
 						<li><a href="funcionesHome.php?funcion=crearPlaylistNueva" title="Crear Playlist nueva"><span class="glyphicon glyphicon-plus"></span></a></li>
-						<li><a href="" title="Mis Playlist"><span class="glyphicon glyphicon-list"></span></a></li>
+						
 					</ul>
 					
 					<form action="" class="navbar-form navbar-left" role="search">
@@ -141,6 +82,7 @@
 							<select id="filtrosPlaylist" name="filtrosPlaylist" style="color:black; display:none;" onchange="realizarBusqueda(busqueda.value, <?php echo $_SESSION['idUsuario']; ?>);">
 							  <option value="nombre" selected>nombre</option>
 							  <option value="genero">genero</option>
+							  <option value="creador">creador</option>
 							</select>
 						</div>
 						
@@ -148,7 +90,7 @@
 					
 					<ul class="nav navbar-nav navbar-right">
 						<li><a href="#"><img src="../imagenes/sin-título-5.jpg" alt="Perfil" width="30px" class="img-circle" title="Perfil"></a></li>
-						<li><a class="usuario" title="Perfil" onclick = "verPerfil()"><?php  echo $nombreSession; ?></a></li>
+						<li><a class="usuario" title="Perfil" ><?php  echo $nombreSession; ?></a></li>
 						<li><a href="index.php" class="salir" title="salir">salir</a></li>
 						<li><a href="#"></a></li>
 					</ul>
@@ -159,9 +101,10 @@
 				
 		</nav>
 		
-		<div id="perfil" style="float: right; margin-top: 50px; ">	</div>	
-		
-		<div id="todasMisPlaylist" style="margin-top: 200px;">
+		<div class="perfil container">
+		<div class="row">
+		<div id="perfil"></div>			
+		<div class="sector col-md-5" id="todasMisPlaylist">
 			<b><?php if (isset($nombrePerfil)){ 
 						echo "Playlist de ". $nombrePerfil. "";
 					} else echo "Mis Playlist"; 
@@ -189,20 +132,20 @@
 				echo"<div id='todasMisPlaylist'>"; playlist::todasMisPlaylist($IdPerfilActual, $_SESSION['idUsuario']);echo "</dvi>";
 			?>
 		</div>
-		<div id="misCanciones">
+		</div>
+		<div class="sector col-md-5" id="misCanciones">
 		<?php
 			
 			if (!isset($nombrePerfil)){ 
 				echo "<b>Mis canciones</b><br>";
 				cancion::todasMisCanciones($_SESSION['idUsuario']);
 				
-				echo "<a href='subirCancionNueva.php' target='_blank'>Subir canción nueva</a>";
+				echo "<a href='subirCancionNueva.php' >Subir canción nueva</a>";
 			
 			}
 		?>
 		</div>
-		
-		<div id="mis seguidores" style="magin-left: 300px;">
+		<div class="sector col-md-2" id="mis seguidores" style="magin-left: 300px;">
 			
 			<?php
 				
@@ -213,6 +156,8 @@
 			?>
 			
 		</div>
+		</div>
+		</div>		
 		<?php
 			if (isset($_SESSION['admin']) != 'true'){  
 				if (isset($nombrePerfil)){
@@ -229,29 +174,16 @@
 		?>
 		<div id="busquedas" style="margin-top: 50px;">
 		</div>
-	</div>
-		<!--ubicacion de origen con google maps-->
-		<div onload="geocodeLatLng()">
-				<?php
-					
-					$db = new database();
-					$db->conectar();
-					/*
-					$conexion = mysqli_connect("localhost", "root", "", "web2")
-								or die('No se pudo conectar:'  . mysqli_error($conexion));
-					*/
-					$query = mysqli_query($db->conexion, "SELECT * FROM usuario WHERE nombre LIKE '$nombreSession';") or die ("Fallo la consulta");
-					$ver = mysqli_fetch_assoc($query);
-					//echo "<br>Coordenadas" . $ver["coordenadas"];
-					//str_replace ( $valor_a_buscar , $valor_de_reemplazo , $string , [$contador ] )
-					$cords = str_replace ("(" , "" , $ver["coordenadas"]);
-				?>
-				<input id="latlng" type="hidden" value="<?php echo $cords; ?>">
-				<div id="map" style = "width: 500px; height: 400px;"></div>
-		</div>
+	</div>		
     
-		
 	<footer>
+		<div class="container">		
+			<img class="center-block" src="../imagenes/espotifi-iso.png" alt="Espotifi" width="25px">
+			<div class="row">
+				<div class="col-md-4 col-md-offset-5">
+					<p>Espotifi - Programación Web 2 </p>				
+				</div>
+			</div>
 	</footer>
 
  	<script src="http://code.jquery.com/jquery-latest.js"></script>

@@ -34,7 +34,7 @@ session_start();
 			administrador::listarTodos();
 			administrador::listarBaneados();
 		?>
-		
+		<a href='index.php'><input type='button' value='salir' ></input></a>
 
 		
 	<footer>

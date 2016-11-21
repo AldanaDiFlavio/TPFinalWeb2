@@ -25,13 +25,13 @@
 		
 		if($db->conectar()){
 			if ($filtroPrimario == 'filtroUsuario'){
-				$busqueda = "SELECT idUsuario, nombre FROM usuario WHERE nombre = '$textoBuscado' AND habilitado = 0";
+				$busqueda = "SELECT idUsuario, nombre FROM usuario WHERE nombre = '$textoBuscado' AND habilitado = 'true'";
 				$resultadoBusqueda = mysqli_query( $db->conexion, $busqueda) or die("error al buscar usuario.");
 				
 				while($row = mysqli_fetch_assoc($resultadoBusqueda)){
 					echo "
 					 
-						<b><a href='home.php?idUsuario=". $row["idUsuario"] ."'>". $row["nombre"] ."</a></b>
+						<b><a href='home.php?idUsuario=". $row["idUsuario"] ."'>". $row["nombre"] ."</a><br></b>
 						
 					";
 				}
@@ -44,10 +44,24 @@
 			if ($filtroPrimario == 'filtroPlaylist' AND $filtroSecundario == 'genero'){
 				$patron = 'gp.descripcion';
 			}
+			if ($filtroPrimario == 'filtroPlaylist' AND $filtroSecundario == 'creador'){
+				$busqueda = "SELECT p.idPlaylist, p.nombre nombrep, gp.descripcion genero, e.descripcion estado, u.nombre nombre, p.codDueno
+						FROM playlist p JOIN generoPlaylist gp ON gp.idGenero = p.codGenero JOIN estado e ON e.idEstado = p.codEstado JOIN usuario u ON u.idUsuario = p.codDueno
+						WHERE u.nombre LIKE '$textoBuscado' AND p.baneo = 0 AND u.habilitado LIKE 'true' AND (p.codEstado = 3 OR p.codDueno IN (SELECT idUsuarioJefe FROM sigue WHERE idUsuarioSeguidor = ". $_SESSION['idUsuario'] .") AND p.codEstado != 1 );";	
+						
+				$resultadoBusqueda = mysqli_query( $db->conexion, $busqueda) or die("error al buscar playlist por nombre/genero.");
+				
+				while($row = mysqli_fetch_assoc($resultadoBusqueda)){
+					echo "
+						<b><a href='miPlaylist.php?idPlaylist=". $row["idPlaylist"] ."'>". $row["nombrep"] ."</a></b>   
+						 ". $row["genero"] ."
+						 ". $row["estado"] ." de <b><a href='home.php?idUsuario=". $row["codDueno"] ."'>". $row["nombre"] ."</a></b><br>";
+				}
+			}
 			if (isset($patron)){
 				
-				$busqueda = "SELECT p.idPlaylist, p.nombre, gp.descripcion genero, e.descripcion estado
-						FROM playlist p JOIN generoPlaylist gp ON gp.idGenero = p.codGenero JOIN estado e ON e.idEstado = p.codEstado
+				$busqueda = "SELECT p.idPlaylist, p.nombre, gp.descripcion genero, e.descripcion estado, u.nombre nombreU, p.codDueno
+						FROM playlist p JOIN generoPlaylist gp ON gp.idGenero = p.codGenero JOIN estado e ON e.idEstado = p.codEstado JOIN usuario u ON u.idUsuario = p.codDueno 
 						WHERE ". $patron ." = '$textoBuscado' AND baneo = 0 AND (p.codEstado = 3 OR p.codDueno IN (SELECT idUsuarioJefe FROM sigue WHERE idUsuarioSeguidor = ". $_SESSION['idUsuario'] ."));";	
 						
 				$resultadoBusqueda = mysqli_query( $db->conexion, $busqueda) or die("error al buscar playlist por nombre/genero.");
@@ -56,7 +70,7 @@
 					echo "
 						<b><a href='miPlaylist.php?idPlaylist=". $row["idPlaylist"] ."'>". $row["nombre"] ."</a></b>   
 						 ". $row["genero"] ."
-						 ". $row["estado"] ."";
+						 ". $row["estado"] ." de <b><a href='home.php?idUsuario=". $row["codDueno"] ."'>". $row["nombreU"] ."</a></b><br>";
 				}
 				
 			} 

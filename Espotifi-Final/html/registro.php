@@ -133,7 +133,7 @@
 							<br/>
 							<button type="submit" class="btn btn-success" value="Aceptar">¡Registrate!</button>
 						</div>
-
+						<br/>
 						<div class="col-md-6">
 							<div class="img-responsive mapa" id ="mapa" style = "width: 450px; height: 350px;"></div>
 						</div>

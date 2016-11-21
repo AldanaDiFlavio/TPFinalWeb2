@@ -1,27 +1,49 @@
 <?php
+	
+	if (isset($_SESSION))
+{
+    unset($_SESSION);
+    session_unset();
+    session_destroy();	
+}
+	
+	
 	session_start();
-	
+	$_SESSION['login'] = "off";
 	include_once('../clases/db.php');
-	
 	
 	if(isset($_SESSION["reg"]))	{
 									if ($_SESSION["reg"]=="true")	{
 																	$_SESSION["reg"]="false";
-																	echo "Registro completo, verifique su correo para terminar el registro";
+																	echo "<div class='aviso'>
+																			<div class='container'> 
+																				Registro completo, verifique su correo para terminar el registro
+																			</div>
+																		</div>";
 																	}
 								}
 		if(isset($_SESSION["habilitado"]))	{
 											if($_SESSION["habilitado"] == "false")	{
 																					$_SESSION["habilitado"] = "true";
-																					echo "El usuario no se encuentra habilitado";
+																					echo "<div class='aviso'>
+																							<div class='container'>
+																								El usuario no se encuentra habilitado
+																							</div>
+																						</div>";
 																					}	
 											}
 		if(isset($_SESSION["valida"]))	{
 										if ($_SESSION["valida"]=="true")	{
 																			$_SESSION["valida"]="false";
-																			echo "El usuario o contrasena son incorrectos";
+																			echo "<div class='aviso'>
+																					<div class='container'>
+																						El usuario o contrasena son incorrectos
+																					</div>
+																				</div>";
 											}															
 										}
+	
+
 ?>
 
 <!DOCTYPE html>
@@ -58,15 +80,7 @@
 						<div><img src="../imagenes/espotifi-iso.png" class="center-block" width="25px;"></div>
 							<form  method = "POST" action = "valida.php">
 								<input class="form-control" placeholder="Nombre de usuario" type = "text" name = "nombre" value = 
-										<?php
-										if(isset($_COOKIE["nombre"])) {
-											$nombre = $_COOKIE["nombre"];
-											echo "$nombre";
-										}else 
-											{
-											echo "";
-											}
-										?> >
+										>
 								</input> 
 								<br/>
 								<input name="contrasena" class="form-control" type="password" placeholder="Password">								

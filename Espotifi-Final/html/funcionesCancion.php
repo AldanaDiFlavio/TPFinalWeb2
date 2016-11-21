@@ -21,7 +21,21 @@
 	if ($funcion == 'cambiarGenero'){
 		cambiarGenero($_REQUEST["generoNuevo"], $_REQUEST["idCancion"]);
 	}
+	if ($funcion == 'eliminarCancion'){
+		eliminarCancion($_REQUEST["idCancion"]);
+	}
 
+	function eliminarCancion($idCancion){
+		$db = new BaseDatos();
+		if($db->conectar()){
+			$buscarIdCancion = "DELETE FROM cancion WHERE idCancion = $idCancion;";
+			mysqli_query( $db->conexion, $buscarIdCancion) or die("error al eliminar cancion.");
+			
+		}
+		$db->desconectar();
+		header("location: home.php?idUsuario=". $_SESSION["idUsuario"] ."") ; 
+	}	
+	
 	
 	function cambiarGenero($generoNuevo, $idCancion){
 		$db = new BaseDatos();

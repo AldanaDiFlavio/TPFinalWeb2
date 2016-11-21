@@ -3,6 +3,7 @@
 	if ($_SESSION['login'] == "on")
 		{
 		include_once('../clases/db.php');
+		include_once('../clases/usuario.php');
 	
 		if(isset($_REQUEST['alerta'])){
 			echo "<script type='text/javascript'>alert('". $_REQUEST['alerta'] ."');</script>";
@@ -10,7 +11,9 @@
 		}else{
 			 header('location: ../html/index.php'); 
 			 }  
-	
+
+		$usuarioSession = new usuario($_SESSION['idUsuario']);
+		$nombreSession = $usuarioSession->armarUsuario();
 ?>
 
 <!DOCTYPE html>
@@ -26,31 +29,91 @@
 	<script type="text/javascript" src="javaScript/funcionesCancion.js"></script>
 </head>
 	<body>
-		
-		<form action="FuncionesCancion.php?funcion=subirCancion" method="post" enctype="multipart/form-data">
-			<h4>Datos de tu canción</h4>
-			<label>Album:</label>
-			<input id="album" onkeyup="validaForm()" type="text" name="album"><br>
-			<label>Artista:</label>
-			<input id="artista" onkeyup="validaForm()" type="text" name="artista"><br>
-			<label>Genero:</label>
-			<?php
-				$db1 = new BaseDatos();
-				if($db1->conectar()){
-					$buscarGenerosCancion = "SELECT idGenero, descripcion FROM generoCanciones;";
-					$generosCanciones = mysqli_query( $db1->conexion, $buscarGenerosCancion) or die("error al buscar los generos de Canciones.");
-				}
-				echo "<select id='generos' name='generos'>";
-				while($row2 = mysqli_fetch_assoc($generosCanciones)){
-					echo "<option value='". $row2["idGenero"] ."'>". $row2["descripcion"] ."</option>";
-				}
-				echo "</select>";
-				$db1->desconectar();
+		<div class="container">
+			<nav class="navbar navbar-default navbar-fixed-top navbar-inverse" style="<?php if ($_SESSION['admin'] == 'true'){ echo "display: none;"; } ?>">
+			<div class="container-fluid">
+				<div class="navbar-header">
+					<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar"> 
+						<span class="icon-bar"></span>
+						<span class="icon-bar"></span>
+						<span class="icon-bar"></span>
+					</button>
 
-			?>
-			<input name="file" type="file">
-			<input id="submit" type="submit" value="Subir audio" disabled="true">
-		</form>
-		
+					<a href="home.php" class="navbar-brand"><img src="../imagenes/espotifi-logo2.png" alt="Espotifi" width="120px"></a>
+				</div>
+
+				<div class="collapse navbar-collapse" id="navbar">
+					<ul class="nav navbar-nav">
+						<li><a href="funcionesHome.php?funcion=crearPlaylistNueva" title="Crear Playlist nueva"><span class="glyphicon glyphicon-plus"></span></a></li>
+						
+					</ul>
+					
+					<form action="" class="navbar-form navbar-left" role="search">
+					
+						<div id="buscador" style="color: white;" class="form-group">
+							<input name="busqueda" type="text" class=" buscador form-control " placeholder="Buscá Playlist o Usuarios" onkeyup="realizarBusqueda(this.value, <?php echo $_SESSION['idUsuario']; ?>);">
+							<input type="radio" name="filtroPrimario" checked value="filtroUsuario" onchange="habilitaFiltros()">usuario
+							<input type="radio" name="filtroPrimario" value="filtroPlaylist" onchange="habilitaFiltros()">playlist
+							<select id="filtrosPlaylist" name="filtrosPlaylist" style="color:black; display:none;" onchange="realizarBusqueda(busqueda.value, <?php echo $_SESSION['idUsuario']; ?>);">
+							  <option value="nombre" selected>nombre</option>
+							  <option value="genero">genero</option>
+							  <option value="creador">creador</option>
+							</select>
+						</div>
+						
+					</form>
+					
+					<ul class="nav navbar-nav navbar-right">
+						<li><a href="#"><img src="../imagenes/sin-título-5.jpg" alt="Perfil" width="30px" class="img-circle" title="Perfil"></a></li>
+						<li><a class="usuario" title="Perfil" ><?php  echo $nombreSession; ?></a></li>
+						<li><a href="index.php" class="salir" title="salir">salir</a></li>
+						<li><a href="#"></a></li>
+					</ul>
+				
+				</div>	
+				
+			</div>
+				
+		</nav>
+			
+		<div class="cancion container">
+			<form action="FuncionesCancion.php?funcion=subirCancion" method="post" enctype="multipart/form-data">
+				<h2>Subí tu canción</h2>
+				<input class="form-control" id="album" onkeyup="validaForm()" type="text" name="album" placeholder="Álbum"><br>
+				<input class="form-control" id="artista" onkeyup="validaForm()" type="text" name="artista" placeholder="Artista"><br>
+				<label>Genero:</label>
+				<?php
+					$db1 = new BaseDatos();
+					if($db1->conectar()){
+						$buscarGenerosCancion = "SELECT idGenero, descripcion FROM generoCanciones;";
+						$generosCanciones = mysqli_query( $db1->conexion, $buscarGenerosCancion) or die("error al buscar los generos de Canciones.");
+					}
+					echo "<select id='generos' name='generos'>";
+					while($row2 = mysqli_fetch_assoc($generosCanciones)){
+						echo "<option value='". $row2["idGenero"] ."'>". $row2["descripcion"] ."</option>";
+					}
+					echo "</select><br><br>";
+
+					$db1->desconectar();
+					
+				?>
+				<input name="file" type="file" /><br/><input id="submit" class="boton btn btn-success" type="submit" value="Subir audio" disabled="true" /><br><br>
+				<?php 
+								echo "<a href='home.php?idUsuario=". $_SESSION['idUsuario'] ."'><input class='boton btn btn-success' id='volver' type='button' value='Volver' ></input></a>";
+
+				?>
+			</form>
+		</div>
+		</div>
+		<footer>
+		<div class="container">		
+			<img class="center-block" src="../imagenes/espotifi-iso.png" alt="Espotifi" width="25px">
+			<div class="row">
+				<div class="col-md-4 col-md-offset-5">
+					<p>Espotifi - Programación Web 2 </p>				
+				</div>
+			</div>
+	</footer>
+
 	</body>
 </html>
