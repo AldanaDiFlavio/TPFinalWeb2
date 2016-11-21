@@ -70,7 +70,7 @@
 				<div class="collapse navbar-collapse" id="navbar">
 					<ul class="nav navbar-nav">
 						<li><a href="funcionesHome.php?funcion=crearPlaylistNueva" title="Crear Playlist nueva"><span class="glyphicon glyphicon-plus"></span></a></li>
-						
+						<li><a href="importarPlaylist.php" title="Importar Playlist"><span class="glyphicon glyphicon-paperclip"></span></a></li>
 					</ul>
 					
 					<form action="" class="navbar-form navbar-left" role="search">
