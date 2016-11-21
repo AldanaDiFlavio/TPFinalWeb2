@@ -18,6 +18,52 @@
 		denunciar($_REQUEST["motivo"], $_REQUEST["denunciado"]);	
 	}
 
+	if ($funcion == 'importarPlaylist'){
+		importarPlaylist();	
+	}
+	
+	function importarPlaylist(){
+		$name = $_FILES['file']['name'];
+		$extension = strtolower(substr($name, strpos($name, '.')+1));
+		$type = $_FILES['file']['type'];
+		$size = $_FILES['file']['size'];
+		$max_size = 8388608; //hasta 8MB = 8388608 bytes
+		$tmp_name = $_FILES['file']['tmp_name'];
+
+		if(isset($name)){
+			if(!empty($name)){
+				$location = "../impPlaylist/" . basename($name);
+				
+				if($extension == 'xspf' || $extension == 'XSPF'){
+						if($size <= $max_size){
+						if(move_uploaded_file($tmp_name, $location)){
+						
+						header("location: importarPlaylist.php?idUsuario=". $_SESSION["idUsuario"] ."&location=". $location ."") ; 
+						}
+					}
+					else{
+						$alerta = "Debe ser menor a 8 MB.";
+						header("location: subirCancionNueva.php?alerta=". $alerta ."") ; 
+					}
+					
+				}
+				else{
+					$alerta = "Debe ser formato mp3 o MP3.";
+					header("location: subirCancionNueva.php?alerta=". $alerta ."") ; 
+				}
+
+			}
+			else{
+				$alerta = "Por favor seleccione un archivo.";
+				
+				header("location: subirCancionNueva.php?alerta=". $alerta .""); 
+			}
+		}
+		
+	}
+	
+	
+	
 	
 	function realizarBusqueda($idUsuario, $filtroPrimario, $filtroSecundario, $textoBuscado){	
 
