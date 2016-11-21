@@ -16,6 +16,7 @@ $email  = $_POST["email"];
 $administrador	= "false";
 $habilitado = "false";
 $ubicacion = $_POST["geo"];
+$coordenadas = $_POST["cords"];
 $denuncias = "0";
 
 $nombreId = $nombre;
@@ -35,7 +36,7 @@ if($nombre!=NULL )	{
 																		$contrasena = md5($pass2);
 																																				
 																		$usuario = new User($idUsuario, $nombre, $contrasena, $email, $administrador, $habilitado,
-																							$ubicacion, $fecha, $denuncias);
+																							$ubicacion, $coordenadas, $fecha, $denuncias);
 																																				
 																		$_SESSION["reg"]="true";
 																		mail($to,$subject,$message,$headers);

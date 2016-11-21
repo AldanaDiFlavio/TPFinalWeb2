@@ -9,10 +9,11 @@ class user {
 			private $administrador;
 			private $habilitado;
 			private $ubicacion;
+			private $coordenadas;
 			private $fecha;
 			private $denuncias;
 			
-			public function __construct($idUsuario, $nombre, $contrasena, $email, $administrador, $habilitado, $ubicacion, $fecha, $denuncias)
+			public function __construct($idUsuario, $nombre, $contrasena, $email, $administrador, $habilitado, $ubicacion, $coordenadas, $fecha, $denuncias)
 										{
 										$this->idUsuario = $idUsuario;
 										$this->nombre = $nombre;
@@ -21,6 +22,7 @@ class user {
 										$this->administrador = $administrador;
 										$this->habilitado = $habilitado;
 										$this->ubicacion = $ubicacion;
+										$this->coordenadas = $coordenadas;
 										$this->fecha = $fecha;
 										$this->denuncias = $denuncias;
 										/*
@@ -36,11 +38,12 @@ class user {
 										$db = new database();
 										$db->conectar();
 										
-										$sql = "INSERT INTO usuario (nombre, contrasena, email, ubicacion, administrador, habilitado, fecha_creacion, denuncias) 
+										$sql = "INSERT INTO usuario (nombre, contrasena, email, ubicacion, coordenadas, administrador, habilitado, fecha_creacion, denuncias) 
 															  VALUES ('$this->nombre', 
 															  '$this->contrasena', 
 															  '$this->email', 
-															  '$this->ubicacion', 
+															  '$this->ubicacion',
+															  '$this->coordenadas', 
 															  '$this->administrador', 
 															  '$this->habilitado', 
 															  '$this->fecha',

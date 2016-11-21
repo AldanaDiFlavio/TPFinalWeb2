@@ -48,6 +48,8 @@
 	<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
 	<script type="text/javascript" src="javaScript/funcionesHome.js"></script>
 	<script type="text/javascript" src="javaScript/funcionesAdministrador.js"></script>
+	<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDJD_N_jOh_hh32hRQVqPr0Ch14ghe42g0&callback=initMap"
+	type="text/javascript"></script>
 	<script>			
 	function verPerfil(){
 						xhttp = new XMLHttpRequest();
@@ -61,7 +63,49 @@
 						xhttp.open("GET", "../php/verperfil.php", "true");
 						xhttp.send();
 						}
+
+	function initMap()	{
+						var map = new google.maps.Map(document.getElementById('map'), {
+						zoom: 8,
+						center: {lat: 40.731, lng: -73.997}
+						});
+						var geocoder = new google.maps.Geocoder;
+						var infowindow = new google.maps.InfoWindow;
+
+						geocodeLatLng(geocoder, map, infowindow);
+						}
+
+	function geocodeLatLng(geocoder, map, infowindow)
+						{
+						var input = document.getElementById('latlng').value;
+						var latlngStr = input.split(',', 2);
+						var latlng = {lat: parseFloat(latlngStr[0]), lng: parseFloat(latlngStr[1])};
+						geocoder.geocode({'location': latlng}, function(results, status)
+							{
+							if (status === google.maps.GeocoderStatus.OK) 
+								{
+								if (results[1]) {
+												map.setZoom(11);
+       
+												var marker = new google.maps.Marker({
+												position: latlng,
+												map: map
+												});
+												map.setCenter(latlng);
+												infowindow.setContent(results[1].formatted_address);
+												infowindow.open(map, marker);
+												} 
+												else	{
+														window.alert('No results found');
+														}
+								} 
+								else{
+									window.alert('Geocoder failed due to: ' + status);
+									}
+							});
+						}
 	</script>
+	
 	</head>
 <body>
 	
@@ -180,9 +224,25 @@
 				}
 			}	
 		?>
-<div id="busquedas" style="margin-top: 50px;">
+		<div id="busquedas" style="margin-top: 50px;">
 		</div>
 	</div>
+		<!--ubicacion de origen con google maps-->
+		<div onload="geocodeLatLng()">
+				<?php
+					
+					$conexion = mysqli_connect("localhost", "root", "mysql153", "web2")
+								or die('No se pudo conectar:'  . mysqli_error($conexion));
+					$query = mysqli_query($conexion, "SELECT * FROM usuario WHERE nombre LIKE '$nombreSession';") or die ("Fallo la consulta");
+					$ver = mysqli_fetch_assoc($query);
+					//echo "<br>Coordenadas" . $ver["coordenadas"];
+					//str_replace ( $valor_a_buscar , $valor_de_reemplazo , $string , [$contador ] )
+					$cords = str_replace ("(" , "" , $ver["coordenadas"]);
+				?>
+				<input id="latlng" type="hidden" value="<?php echo $cords; ?>">
+				<div id="map" style = "width: 500px; height: 400px;"></div>
+		</div>
+    
 		
 	<footer>
 	</footer>
