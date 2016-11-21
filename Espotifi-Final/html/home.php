@@ -1,12 +1,14 @@
 <?php
 	session_start();
+	include_once('../clases/database.php');
+	
 	if ($_SESSION['login'] == "on")
 		{
 			include_once('../clases/playlist.php');
 			include_once('../clases/usuario.php');
 			include_once('../clases/cancion.php');
 			include_once('../clases/administrador.php');
-			include_once('../clases/database.php');
+			
 			
 			playlist::purgaPlaylistVacias($_SESSION['idUsuario']);
 			
@@ -238,7 +240,7 @@
 					$conexion = mysqli_connect("localhost", "root", "", "web2")
 								or die('No se pudo conectar:'  . mysqli_error($conexion));
 					*/
-					$query = mysqli_query($conexion, "SELECT * FROM usuario WHERE nombre LIKE '$nombreSession';") or die ("Fallo la consulta");
+					$query = mysqli_query($db->conexion, "SELECT * FROM usuario WHERE nombre LIKE '$nombreSession';") or die ("Fallo la consulta");
 					$ver = mysqli_fetch_assoc($query);
 					//echo "<br>Coordenadas" . $ver["coordenadas"];
 					//str_replace ( $valor_a_buscar , $valor_de_reemplazo , $string , [$contador ] )
