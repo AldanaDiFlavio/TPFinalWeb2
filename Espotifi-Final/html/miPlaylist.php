@@ -152,10 +152,10 @@
 
 	</div>
 
-		<div class="container cancion">
+		<div class="container playlist cancion">
 			<div class="row">		
 			<?php
-				echo "<div class='col-md-4'>";
+				echo "<div class='col-md-6'>";
 				$db = new BaseDatos();
 				if($db->conectar()){
 					$buscarNombrePlaylist = "SELECT p.nombre, cantidad_reproducciones cr, u.nombre usuario, gp.descripcion, p.colorFondo, p.colorLetras, p.codDueno, e.descripcion estado, p.fotoPath  FROM playlist p JOIN generoPlaylist gp ON gp.idGenero = p.codGenero JOIN estado e ON e.idEstado = p.codEstado JOIN usuario u ON p.codDueno = u.idUsuario WHERE p.idPlaylist = $idPlaylist;";
@@ -221,7 +221,7 @@
 						}
 						echo "</select>";
 						echo "<a id='generoNuevoOk' href='#' onclick='cambiarGenero(". $idPlaylist .");' style='display:none;'><span onclick='editarElemento(generoNuevo,generoNuevoOk);' class='glyphicon glyphicon-ok'></a>";
-
+						
 						$db1->desconectar();
 					}
 					if ($row["codDueno"] == $_SESSION['idUsuario']){
@@ -229,8 +229,8 @@
 					Color fondo <input id='nuevoColorFondo' name='nuevoColorFondo' type='color' onchange='cambiarEsquema(". $idPlaylist .")' value='#". $row["colorFondo"] ."'/>
 					Color letras <input id='nuevoColorLetras' name='nuevoColorLetras' type='color' onchange='cambiarEsquema(". $idPlaylist .")' value='#". $row["colorLetras"] ."'/><br>";
 					}
-					echo "
-					<table id='tablaListadoCanciones'>";
+					echo "<br>Canciones
+					<table class='table' id='tablaListadoCanciones'>";
 					
 					$db1 = new BaseDatos();
 					if($db1->conectar()){
@@ -242,6 +242,10 @@
 								<th>Artista </th>
 								<th>Album </th>
 								<th>Genero </th>
+								<th></th>
+								<th></th>
+
+
 						</tr>";
 						while($row1 = mysqli_fetch_assoc($resultadobuscarTodasCanciones)){
 							echo "
@@ -267,8 +271,8 @@
 
 
 					if ($row["codDueno"] == $_SESSION['idUsuario']){
-						echo "<a onclick='mostrarTodasLasCanciones(". $idPlaylist .");'><span class='glyphicon glyphicon-plus'></a>
-						<table name='tablaListadoCancionesDisponibles' id='tablaListadoCancionesDisponibles' style='display:none;'></table>";
+						echo "<br><a onclick='mostrarTodasLasCanciones(". $idPlaylist .");'><span class='glyphicon glyphicon-plus'></span> Agregar canciones</a><hr>
+						<table class='table' name='tablaListadoCancionesDisponibles' id='tablaListadoCancionesDisponibles' style='display:none;'></table>";
 					}
 
 
@@ -281,9 +285,10 @@
 					
 					if ($row["codDueno"] == $_SESSION['idUsuario']){
 						echo "<a href='funcionesMiPlaylist.php?funcion=eliminarPlaylist&idPlaylist=". $idPlaylist ."'><input class='boton btn btn-success' type='button' value='eliminar'></input></a>";
+						echo "<a href='funcionesMiPlaylist.php?funcion=exportarPlaylist&idPlaylist=". $idPlaylist ."'><input class='boton btn btn-success' id='exportar' type='button' value='Exportar' ></input></a>";
 			echo "</div>";
-			echo "<div class='col-md-5'>";
-			echo "<b>Portada de tu playlist</b>";
+			echo "<div class='col-md-5 col-md-offset-1'>";
+			echo "<br><b>Portada de tu playlist</b>";
 					echo "
 					<form style='color: black;' action='funcionesMiPlaylist.php?funcion=subirFoto&idPlaylist=". $idPlaylist ."' method='post' enctype='multipart/form-data'>
 						<input name='file' type='file'>
@@ -292,18 +297,16 @@
 					";}
 
 					if ($row['fotoPath'] != "0" ){
-					echo "<img src='../". $row["fotoPath"] ."'width='400' >";
+					echo "<img src='../". $row["fotoPath"] ."'width='300' >";
 					}
 
 					
 				}
-			echo "</div>";
 			$db->desconectar();
 			?>	
 			
 		<!--ubicacion de origen con google maps-->
-		<div class="col-md-3">
-		<b>Ubicación</b>
+		<br/><br/><b>Ubicación</b>
 		<div onload="geocodeLatLng()">
 				<?php
 					$db = new BaseDatos();
@@ -324,7 +327,7 @@
 				?>
 				<br/>
 				<input id="latlng" type="hidden" value="<?php echo $cords; ?>">
-				<div class="center-block" id="map" style = "width: 300px; height: 200px;"></div>
+				<div id="map" style = "width: 300px; height: 200px;"></div>
 		</div>	
 		</div>
 		</div>

@@ -30,10 +30,6 @@
 			 header('location: ../html/index.php'); 
 			 }  
 	
-	
-	
-	
-	
 ?>
 
 <!DOCTYPE html>
@@ -51,7 +47,7 @@
 	
 	
 	</head>
-<body>
+<body onload="imageRandom()">
 	
 	<div class="container">
 		
@@ -104,7 +100,7 @@
 		<div class="perfil container">
 		<div class="row">
 		<div id="perfil"></div>			
-		<div class="sector col-md-5" id="todasMisPlaylist">
+		<div class="sector col-md-4" id="todasMisPlaylist">
 			<b><?php if (isset($nombrePerfil)){ 
 						echo "Playlist de ". $nombrePerfil. "";
 					} else echo "Mis Playlist"; 
@@ -145,7 +141,7 @@
 			}
 		?>
 		</div>
-		<div class="sector col-md-2" id="mis seguidores" style="magin-left: 300px;">
+		<div class="sector col-md-3" id="mis seguidores" style="magin-left: 300px;">
 			
 			<?php
 				
@@ -188,5 +184,6 @@
 
  	<script src="http://code.jquery.com/jquery-latest.js"></script>
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+	<script src="javaScript/imageRandom.js"></script>
 </body>
 </html>

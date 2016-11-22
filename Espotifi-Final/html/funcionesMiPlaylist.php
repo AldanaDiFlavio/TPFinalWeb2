@@ -46,7 +46,15 @@
 		subirFoto($_REQUEST['idPlaylist']);
 	}
 
-	
+	if ($funcion == 'exportarPlaylist'){
+		exportarPlaylist($_REQUEST['idPlaylist']);
+	}
+
+	function exportarPlaylist($idPlaylist){
+		$playlist = new playlist($idPlaylist);
+		$playlist->exportarPlaylist();
+		header("location: miPlaylist.php?idPlaylist=". $idPlaylist ."") ; 
+	}
 	function cambiarNombre($nombreNuevo, $idPlaylist){
 		$db = new BaseDatos();
 		if($db->conectar()){
@@ -155,6 +163,8 @@
 			<th>Artista </th>
 			<th>Album </th>
 			<th>Genero </th>
+			<th></th>
+			<th></th>
 		</tr>";
 		while($row = mysqli_fetch_assoc($resultadoCancionesDisponibles)){
 			echo "

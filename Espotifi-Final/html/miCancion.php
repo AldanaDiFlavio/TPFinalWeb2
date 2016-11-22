@@ -22,8 +22,8 @@
 	<script type="text/javascript" src="javaScript/funcionesCancion.js"></script>
 </head>
 
-<body>
-	<div id="container" class="container" class="acciones" >
+<body onload="imageRandom()">
+	<div id="ontainer" class="modicancion container" class="acciones" >
 		<nav class="navbar navbar-default navbar-fixed-top navbar-inverse" style="<?php if ($_SESSION['admin'] == 'true'){ echo "display: none;"; } ?>">
 			<div class="container-fluid">
 				<div class="navbar-header">
@@ -71,7 +71,8 @@
 		</nav>
 
 		<div class="container cancion">
-					
+			<div class="col-md-12">
+			<div class="col-md-10 col-md-offset-4">	
 			<?php
 				$db = new BaseDatos();
 				if($db->conectar()){
@@ -118,8 +119,8 @@
 
 				
 			?>	
+			</div></div>
 			</div>
-			
 	</div>
 
 	<footer>
@@ -134,5 +135,6 @@
 
  	<script src="http://code.jquery.com/jquery-latest.js"></script>
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+	<script src="javaScript/imageRandom.js"></script>
 </body>
 </html>

@@ -28,7 +28,7 @@
 	<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
 	<script type="text/javascript" src="javaScript/funcionesCancion.js"></script>
 </head>
-	<body>
+	<body onload="imageRandom()">
 		<div class="container">
 			<nav class="navbar navbar-default navbar-fixed-top navbar-inverse" style="<?php if ($_SESSION['admin'] == 'true'){ echo "display: none;"; } ?>">
 			<div class="container-fluid">
@@ -75,10 +75,12 @@
 			</div>
 				
 		</nav>
-			
-		<div class="cancion container">
+			<h1 class="h1">Subí tu canción</h1>
+		<div class="subecancion container">
+			<div class="row">
+			<div class="col-md-7 col-md-offset-4">
 			<form action="FuncionesCancion.php?funcion=subirCancion" method="post" enctype="multipart/form-data">
-				<h2>Subí tu canción</h2>
+				<br/><br/>
 				<input class="form-control" id="album" onkeyup="validaForm()" type="text" name="album" placeholder="Álbum"><br>
 				<input class="form-control" id="artista" onkeyup="validaForm()" type="text" name="artista" placeholder="Artista"><br>
 				<label>Genero:</label>
@@ -97,12 +99,14 @@
 					$db1->desconectar();
 					
 				?>
-				<input name="file" type="file" /><br/><input id="submit" class="boton btn btn-success" type="submit" value="Subir audio" disabled="true" /><br><br>
+				<input name="file" type="file" /><br/><input id="submit" class="boton btn btn-success" type="submit" value="Subir audio" disabled="true" />
 				<?php 
-								echo "<a href='home.php?idUsuario=". $_SESSION['idUsuario'] ."'><input class='boton btn btn-success' id='volver' type='button' value='Volver' ></input></a>";
+								echo "<a href='home.php?idUsuario=". $_SESSION['idUsuario'] ."'><input class='boton btn btn-success' id='volver' type='button' value='Volver' ></input></a><br><br>";
 
 				?>
 			</form>
+		</div>
+		</div>
 		</div>
 		</div>
 		<footer>
@@ -114,6 +118,11 @@
 				</div>
 			</div>
 	</footer>
+	<!-- Latest compiled and minified JavaScript -->
+	<script src="http://code.jquery.com/jquery-latest.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+	<script src="javaScript/imageRandom.js"></script>
 
 	</body>
+
 </html>
