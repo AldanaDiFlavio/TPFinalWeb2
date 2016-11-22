@@ -267,6 +267,41 @@ class playlist {
 				}
 				$db->desconectar();
 			}
+			
+			public function exportarPlaylist(){
+				$db = new BaseDatos();			
+				if($db->conectar()){
+						$buscarPlaylist = "SELECT p.idPlaylist, p.nombre nombre, c.idCancion, c.titulo, c.album, c.artista, c.path 
+										FROM playlist p JOIN contiene cont ON p.idPlaylist = cont.codPlaylist JOIN cancion c ON c.idCancion = cont.codCancion 
+										WHERE cont.codPlaylist = $this->idPlaylist;";
+						$resultado = mysqli_query( $db->conexion, $buscarPlaylist) or die("No se pudo armar playlist.");
+						$cont = 0;
+						$buffer='
+<?xml version="1.0" encoding="UTF-8"?>
+<playlist version="1" xmlns="http://xspf.org/ns/0/">
+	<trackList>'; 
+						  while ($row = mysqli_fetch_assoc($resultado)){ 
+						  $cont++;
+						  $nombre = $row['nombre'];
+							$buffer.="
+		<track>
+			<location>../". $row['path'] ."</location>
+			<title>". $row['path'] ."</title>
+			<album>". $row['album'] ."</album>
+			<creator>". $row['artista'] ."</creator>
+		</track>
+		"; 
+						  } 
+						  $buffer.="
+	</trackList>
+</playlist>"; 
+						  $file=fopen("../". $nombre .".xspf","w+"); 
+						  fwrite ($file,$buffer); 
+						  fclose($file); 
+
+				}
+				$db->desconectar();
+			}
 
 	}
 

@@ -1,0 +1,41 @@
+
+<?xml version="1.0" encoding="UTF-8"?>
+<playlist version="1" xmlns="http://xspf.org/ns/0/">
+	<trackList>
+		<track>
+			<location>../canciones/mujer amante.mp3</location>
+			<title>canciones/mujer amante.mp3</title>
+			<album>magos, espadas y rosas</album>
+			<creator>rata blanca</creator>
+		</track>
+		
+		<track>
+			<location>../canciones/aire.mp3</location>
+			<title>canciones/aire.mp3</title>
+			<album>warcry</album>
+			<creator>warcry</creator>
+		</track>
+		
+		<track>
+			<location>../canciones/pura vida.mp3</location>
+			<title>canciones/pura vida.mp3</title>
+			<album>carajo</album>
+			<creator>carajo</creator>
+		</track>
+		
+		<track>
+			<location>../canciones/09 - The Shoals of Herring.mp3</location>
+			<title>canciones/09 - The Shoals of Herring.mp3</title>
+			<album>dfs</album>
+			<creator>sdfs</creator>
+		</track>
+		
+		<track>
+			<location>../canciones/Rihanna_-_Needed_Me-Vubey.mp3</location>
+			<title>canciones/Rihanna_-_Needed_Me-Vubey.mp3</title>
+			<album>Rihanna</album>
+			<creator>Rihanna</creator>
+		</track>
+		
+	</trackList>
+</playlist>

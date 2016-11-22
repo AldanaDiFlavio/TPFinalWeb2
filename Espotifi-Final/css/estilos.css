@@ -62,8 +62,29 @@ h1{
 
 }
 
+th{
+	font-size: 20px;
+}
+
+a{
+	color: #7FB43F;
+}
+
+.nombreplay{
+	font-size: 20px;
+}
+
+.tablacanciones{
+	border: 1px #000 solid;
+}
+
 .cancion{
 	margin-top: 80px;
+	margin-bottom: 80px;
+}
+
+.admin{
+	margin-top: 30px;
 	margin-bottom: 80px;
 }
 
@@ -71,8 +92,13 @@ h1{
 	margin-bottom: 10px;
 }
 
-.top5{
+.top5, .playlist, .subecancion, .admin, .perfil{
+	background: rgba(255,255,255,0.9);
+}
+
+.modicancion{
 	background: rgba(255,255,255,0.85);
+	margin-top: 100px;
 }
 
 .musicPlayer{
@@ -119,6 +145,10 @@ h1{
 	font-size: 20px;
 }
 
+.sector{
+	padding: 80px;
+}
+
 .acciones{
 	margin-top: 100px;
 	margin-bottom: 100px;
@@ -128,10 +158,15 @@ h1{
 	margin: 10px;
 }
 
-.cancion input[type=text]{
-	width: 30%;
+.cancion input[type=text], .subecancion input[type=text]{
+	width: 50%;
 }
 
+.h1{
+	margin-top: 80px;
+	color:#fff;
+	font-size: 60px;
+}
 h2{
 	font-size: 40px;
 	margin-bottom: 20px;

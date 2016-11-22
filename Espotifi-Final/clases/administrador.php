@@ -20,7 +20,7 @@ class administrador {
 					
 				}
 				
-				echo "<b>Todos los denunciados</b><table>
+				echo "<b>Todos los denunciados</b><table class='table'>
 						<tr>
 							<th>ID Denunciado </th>
 							<th>Nombre</th> 
@@ -51,7 +51,7 @@ class administrador {
 						echo "<td><a onclick='banearPerfil(". $row["idUsuario"] .");' href=''><span class='glyphicon glyphicon-ban-circle' ></a></span></td>";						
 					echo "</tr> ";				
 				}  
-				echo "</table>";
+				echo "<br></table>";
 				$db->desconectar();
 			}
 			
@@ -63,12 +63,14 @@ class administrador {
 					$resultado = mysqli_query( $db->conexion, $denuncias) or die("Error al listar denuncias.");	
 				}
 				
-				echo "<b>Todos los usuarios</b><table>
+				echo "<b>Todos los usuarios</b><table class='table'>
 						<tr>
 							<th>ID Usuario </th>
 							<th>Nombre</th> 
 							<th>email</th>
 							<th>fecha de creacion</th>
+							<th></th>
+							<th></th>
 						</tr>";
 				while ($row = mysqli_fetch_assoc($resultado)){   
 					echo "
@@ -77,11 +79,11 @@ class administrador {
 						<td>". $row['nombre'] ."</td>
 						<td>". $row['email'] ."</td>
 						<td>". $row['fecha_creacion'] ."</td>
-						<td><a href='home.php?idUsuario=". $row["idUsuario"] ."' target='_blank'><span class='glyphicon glyphicon-user'></a></span></td>
-						<td><a onclick='banearPerfil(". $row["idUsuario"] .");' href=''><span class='glyphicon glyphicon-ban-circle'></span></a></td>						
+						<td><a href='home.php?idUsuario=". $row["idUsuario"] ."' target='_blank'><span class='glyphicon glyphicon-user' title='Ver Perfil Usuario'></a></span></td>
+						<td><a onclick='banearPerfil(". $row["idUsuario"] .");' href=''><span class='glyphicon glyphicon-ban-circle' title='Banear Usuario'></span></a></td>						
 					</tr> ";				
 				}  
-				echo "</table>";
+				echo "<br></table>";
 				
 			
 			}
@@ -93,12 +95,14 @@ class administrador {
 					$resultado = mysqli_query( $db->conexion, $baneados) or die("Error al listar baneados.");	
 				}
 				$db->desconectar();
-				echo "<b>Todos los baneados o pendientes de habilitacion</b><table>
+				echo "<b class='title'>Todos los baneados o pendientes de habilitacion</b><table class='table'>
 						<tr>
 							<th>ID Usuario </th>
 							<th>Nombre</th> 
 							<th>email</th>
 							<th>fecha de creacion</th>
+							<th></th>
+							<th></th>
 						</tr>";
 				while ($row = mysqli_fetch_assoc($resultado)){ 
 					echo "
@@ -107,11 +111,11 @@ class administrador {
 						<td>". $row['nombre'] ."</td>
 						<td>". $row['email'] ."</td>
 						<td>". $row['fecha_creacion'] ."</td>
-						<td><a href='home.php?idUsuario=". $row["idUsuario"] ."' target='_blank'><span class='glyphicon glyphicon-user'></a></span></td>
-						<td><a onclick='habilitarPerfil(". $row["idUsuario"] .");' href=''><span class='glyphicon glyphicon-ok-circle'></span></a></td>						
+						<td><a href='home.php?idUsuario=". $row["idUsuario"] ."' target='_blank'><span class='glyphicon glyphicon-user' title='Ver Perfil Usuario'></a></span></td>
+						<td><a onclick='habilitarPerfil(". $row["idUsuario"] .");' href=''><span class='glyphicon glyphicon-ok-circle' title='Habilitar'></span></a></td>						
 						</tr> ";				
 				}  
-				echo "</table>";				
+				echo "<br></table>";				
 			}
 			
 }		
