@@ -34,6 +34,7 @@ session_start();
 			administrador::listarTodos();
 			administrador::listarBaneados();
 		?>
+		<a href='estadisticas.php'><input class="boton btn btn-success" type='button' value='Estadisticas' ></input></a>
 		<a href='index.php'><input class="boton btn btn-success" type='button' value='salir' ></input></a>
 
 		
