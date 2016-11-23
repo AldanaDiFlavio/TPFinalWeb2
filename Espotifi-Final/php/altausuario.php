@@ -16,13 +16,14 @@ $email  = $_POST["email"];
 $administrador	= "false";
 $habilitado = "false";
 $ubicacion = $_POST["geo"];
+$pais = $_POST["pais"];
 $coordenadas = $_POST["cords"];
 $denuncias = "0";
 
 $nombreId = $nombre;
 $to = $email;
 $subject = "Confirmacion de registro";
-$message = "Haga click en el siguiente enlace para confirmar el registro" . " <a href = 'localhost\espotifi-final\php\confirmacion.php?nombreId=".$nombreId."'> link </a>";
+$message = "Haga click en el siguiente enlace para confirmar el registro" . " <a href = 'localhost\espotifi\php\confirmacion.php?nombreId=".$nombreId."'> link </a>";
 $headers = "From: administrador@example.com";
 
 $headers  = "MIME-Version: 1.0" . "\r\n";
@@ -36,7 +37,7 @@ if($nombre!=NULL )	{
 																		$contrasena = md5($pass2);
 																			$idUsuario = 0;												
 																		$usuario = new User($idUsuario, $nombre, $contrasena, $email, $administrador, $habilitado,
-																							$ubicacion, $coordenadas, $fecha, $denuncias);
+																							$ubicacion, $pais, $coordenadas, $fecha, $denuncias);
 																																				
 																		$_SESSION["reg"]="true";
 																		mail($to,$subject,$message,$headers);
