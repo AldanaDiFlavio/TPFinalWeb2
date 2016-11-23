@@ -1,16 +1,4 @@
-<?php
-session_start();
-	
-	if ($_SESSION['login'] == "on")
-		{
-		include_once('../clases/administrador.php');
-		$_SESSION['admin'] = 'true';
-		}else{
-			 header('location: ../html/index.php'); 
-			 }  
-	
-									
-?>
+
 <html>
   	<head>
 	    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
@@ -23,7 +11,21 @@ session_start();
 
 	      	google.charts.setOnLoadCallback(loadData);
 	    });
-      
+      	//PROBLEMAS CON ESTA FUNCION!!!! NO MUESTRA EL GRAFICO HAY PROBLEMAS CON EL JSON AIUDAA!!!!! BORRAR ESTO XD
+      	function loadData2() {
+      		//periodo
+      		var ini = document.getElementById('fechaIni');
+      		var fin = document.getElementById('fechaFin');
+
+      		$.ajax({
+      			type: "GET",
+	      		url:"../php/cantPlaylistPeriodo.php",
+	      		data:{id=fechaIni&id=fechaFin;},
+	      		dataType:"JSON",
+	      		success: drawChartPlaylistPeriodo
+	      	});
+      	}
+
       	function loadData() {
       		//periodo
       		$.ajax({
@@ -56,6 +58,9 @@ session_start();
 	      		success: drawChartCantUsuariosPais
 	      	});
       	}
+
+
+      	
       	//periodo
       	function drawChartPlaylistPeriodo(jsonData){
 	      	var pieData = new google.visualization.arrayToDataTable(jsonData);
@@ -98,23 +103,21 @@ session_start();
 	      	var table = new google.visualization.Table(document.getElementById('cantUsuariosPaisTable'));
 	      	table.draw(pieData,{showRowNumber: true, width: '60%'});
       	}
-      
-      
     </script>
   </head>
-  	<body class=>
+  	<body>
   		<h1>Estadisticas</h1>
   		
 		<div>
 			<h3>Cantidad de playlist creada en un periodo determinado</h3>
-			<form id="form" name="form" method="post" action="<?php echo $_SERVER['PHP_SELF']; ?>">
+			<form id="form" name="form" method="get" action="../php/cantPlaylistPeriodo.php">
 				Fecha Inicio:
-				<input type="date" name="fechaIni" class="datepicker">
+				<input type="date" id="fechaIni" name="fechaIni">
 				<br>
 				Fecha Final:
-				<input type="date" name="fechaFin" class="datepicker">
+				<input type="date" id="fechaFin" name="fechaFin">
 				<br>
-				<input type="submit" value="Consultar">
+				<input type="submit" value="Consultar" onclick="loadData2();">
 			</form>
   			<div id="cantPlaylistPeriodoChart" style="border: 1px solid #ccc"></div>
        		<div id="cantPlaylistPeriodoTable" style="border: 1px solid #ccc"></div>
