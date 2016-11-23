@@ -58,7 +58,9 @@
 																{										
 																//se crea una variable ubicacion y se asigna ese valor al input "geo"
 																var ubicacion = results[0].formatted_address;
+																var pais = results[1].address_components[4].long_name;
 																document.getElementById('geo').value = ubicacion;
+																document.getElementById('pais').value = pais;
 																document.getElementById('cords').value = results[0].geometry.location;
 																pos = results[0].geometry.location;
 																map.setCenter(pos);
@@ -129,7 +131,9 @@
 							<input class="form-control" name="email" type="text" placeholder="ejemplo@mail.com" />
 							<br/>
 							<input class="form-control" name="geo" id="geo" type="text" placeholder="Seleccione su ubicacion en el mapa" />
+							<input type='hidden' name="pais" id="pais" />
 							<input type='hidden' name="cords" id="cords" />
+							
 							<br/>
 							<button type="submit" class="btn btn-success" value="Aceptar">¡Registrate!</button>
 						</div>

@@ -1,4 +1,16 @@
-
+<?php
+session_start();
+	
+	if ($_SESSION['login'] == "on")
+		{
+		include_once('../clases/administrador.php');
+		$_SESSION['admin'] = 'true';
+		}else{
+			 header('location: ../html/index.php'); 
+			 }  
+	
+									
+?>
 <html>
   	<head>
 	    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
@@ -11,7 +23,7 @@
 
 	      	google.charts.setOnLoadCallback(loadData);
 	    });
-      	//PROBLEMAS CON ESTA FUNCION!!!! NO MUESTRA EL GRAFICO HAY PROBLEMAS CON EL JSON AIUDAA!!!!! BORRAR ESTO XD
+      	
       	function loadData2() {
       		//periodo
       		var ini = document.getElementById('fechaIni');
@@ -20,7 +32,7 @@
       		$.ajax({
       			type: "GET",
 	      		url:"../php/cantPlaylistPeriodo.php",
-	      		data:{id=fechaIni&id=fechaFin;},
+	      		data:"fechaIni="+ini+"&fechaFin="+fin,
 	      		dataType:"JSON",
 	      		success: drawChartPlaylistPeriodo
 	      	});
